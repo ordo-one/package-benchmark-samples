@@ -96,28 +96,9 @@ func benchmarks() {
         fatalError("This test is disabled and should not have been run")
     }
 
-
-
-/*
-
-    public init?(_ name: String,
-                 metrics: [BenchmarkMetric] = BenchmarkMetric.default,
-                 timeUnits: BenchmarkTimeUnits? = .automatic,
-                 isolation: Bool = false,
-                 warmup: Bool = true,
-                 scalingFactor: StatisticsUnits = .count,
-                 polarity: Polarity = .prefersSmaller,
-                 timeResults: TimeResultsInterpretation = .latency,
-                 desiredDuration: TimeDuration = .milliseconds(250),
-                 desiredIterations: Int = 100_000, // iterations
-                 disabled: Bool = false,
-                 closure: @escaping BenchmarkClosure)
-
-
-
-*/
-
-
+    Benchmark("Specific metrics", metrics: [.wallClock, .cpuTotal, .memoryLeaked], desiredDuration: defaultRunTime()) { benchmark in
+        dummyCounter(defaultCounter())
+    }
 
     /* There metrics doesn't exist yet, so we will crash if trying to enable them
     Benchmark("Memory metrics", metrics: BenchmarkMetric.memory, desiredDuration: defaultRunTime()) { benchmark in
@@ -136,7 +117,4 @@ func benchmarks() {
         dummyCounter(defaultCounter())
     }
 */
-    Benchmark("Specific metrics", metrics: [.wallClock, .cpuTotal, .memoryLeaked], desiredDuration: defaultRunTime()) { benchmark in
-        dummyCounter(defaultCounter())
-    }
 }
