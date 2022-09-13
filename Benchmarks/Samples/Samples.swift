@@ -8,6 +8,8 @@
 // http://www.apache.org/licenses/LICENSE-2.0
 //
 
+@testable import package_benchmark_samples
+
 import BenchmarkSupport
 @main extension BenchmarkRunner {}
 
@@ -20,6 +22,10 @@ func benchmarks() {
         for x in 0..<count {
             blackHole(x)
         }
+    }
+
+    Benchmark("myInternalDummyCounter", metrics: [.wallClock, .throughput], desiredDuration: defaultRunTime()) { benchmark in
+        myInternalDummyCounter(defaultCounter())
     }
 
     Benchmark("Counter", metrics: [.wallClock, .throughput], desiredDuration: defaultRunTime()) { benchmark in

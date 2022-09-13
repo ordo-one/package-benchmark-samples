@@ -39,6 +39,7 @@ let package = Package(
             name: "Samples-Benchmark",
             dependencies: [
                 .product(name: "BenchmarkSupport", package: "package-benchmark"),
+		"package-benchmark-samples"
             ],
             path: "Benchmarks/Samples"
         ),
