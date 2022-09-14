@@ -5,8 +5,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/ordo-one/package-benchmark",
       "state" : {
-        "revision" : "97dbb69adfbaa6238a83c2dddfc374c870f2ea0d",
-        "version" : "0.0.3"
+        "revision" : "dd314efbd821ac392f066588c6a70684665f7b76",
+        "version" : "0.0.4"
       }
     },
     {

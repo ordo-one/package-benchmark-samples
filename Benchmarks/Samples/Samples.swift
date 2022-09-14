@@ -16,6 +16,12 @@ import BenchmarkSupport
 @_dynamicReplacement(for: registerBenchmarks)
 func benchmarks() {
 
+    // Some helper stuff
+    struct CustomMetrics {
+        static var one: String { "CustomOne" }
+        static var two: String { "CustomTwo" }
+    }
+
     func defaultRunTime() -> TimeDuration { .milliseconds(100)}
     func defaultCounter() -> Int { 10_000 }
     func dummyCounter(_ count: Int) {
@@ -24,8 +30,10 @@ func benchmarks() {
         }
     }
 
+    // The actual benchmarks
+
     Benchmark("myInternalDummyCounter", metrics: [.wallClock, .throughput], desiredDuration: defaultRunTime()) { benchmark in
-        myInternalDummyCounter(defaultCounter())
+        myInternalDummyCounter(defaultCounter()) // Calls the function internal to the library target using @testable import
     }
 
     Benchmark("Counter", metrics: [.wallClock, .throughput], desiredDuration: defaultRunTime()) { benchmark in
@@ -74,17 +82,17 @@ func benchmarks() {
         dummyCounter(defaultCounter())
     }
 
-    Benchmark("Custom metrics", metrics: [.custom("CustomOne"), .custom("CustomTwo")], desiredDuration: defaultRunTime()) { benchmark in
-        benchmark.measurement(.custom("CustomOne"), Int.random(in: 0...1_000_000))
-        benchmark.measurement(.custom("CustomTwo"), Int.random(in: 0...1_000))
+    Benchmark("Custom metrics", metrics: [.custom(CustomMetrics.one), .custom(CustomMetrics.two)], desiredDuration: defaultRunTime()) { benchmark in
+        benchmark.measurement(.custom(CustomMetrics.one), Int.random(in: 0...1_000_000))
+        benchmark.measurement(.custom(CustomMetrics.two), Int.random(in: 0...1_000))
     }
 
     Benchmark("Extended + custom metrics",
-              metrics: BenchmarkMetric.extended + [.custom("CustomOne"), .custom("CustomTwo")],
+              metrics: BenchmarkMetric.extended + [.custom(CustomMetrics.one), .custom(CustomMetrics.two)],
               desiredDuration: defaultRunTime()) { benchmark in
         dummyCounter(defaultCounter())
-        benchmark.measurement(.custom("CustomOne"), Int.random(in: 0...1_000_000))
-        benchmark.measurement(.custom("CustomTwo"), Int.random(in: 0...1_000))
+        benchmark.measurement(.custom(CustomMetrics.one), Int.random(in: 0...1_000_000))
+        benchmark.measurement(.custom(CustomMetrics.two), Int.random(in: 0...1_000))
     }
 
     Benchmark("Counter 57 iterations", metrics: [.wallClock, .throughput], desiredIterations:57) { benchmark in
