@@ -23,8 +23,8 @@ func benchmarks() {
     }
 
     func defaultRunTime() -> TimeDuration { .milliseconds(100)}
-    func defaultCounter() -> Int { 10_000 }
-    func dummyCounter(_ count: Int) {
+    @Sendable func defaultCounter() -> Int { 10_000 }
+    @Sendable func dummyCounter(_ count: Int) {
         for x in 0..<count {
             blackHole(x)
         }
@@ -67,10 +67,13 @@ func benchmarks() {
         dummyCounter(defaultCounter())
     }
 
-    Benchmark("Minimal benchmark", metrics: [.wallClock], desiredDuration: defaultRunTime()) { benchmark in
+    Benchmark("Minimal benchmark",
+              metrics: [.wallClock]) { benchmark in
     }
 
-    Benchmark("Extended metrics", metrics: BenchmarkMetric.extended, desiredDuration: defaultRunTime()) { benchmark in
+    Benchmark("Extended metrics",
+              metrics: BenchmarkMetric.extended,
+              desiredDuration: defaultRunTime()) { benchmark in
         dummyCounter(defaultCounter())
     }
 
@@ -82,7 +85,9 @@ func benchmarks() {
         dummyCounter(defaultCounter())
     }
 
-    Benchmark("Custom metrics", metrics: [.custom(CustomMetrics.one), .custom(CustomMetrics.two)], desiredDuration: defaultRunTime()) { benchmark in
+    Benchmark("Custom metrics",
+              metrics: [.custom(CustomMetrics.one), .custom(CustomMetrics.two)],
+              desiredDuration: defaultRunTime()) { benchmark in
         benchmark.measurement(.custom(CustomMetrics.one), Int.random(in: 0...1_000_000))
         benchmark.measurement(.custom(CustomMetrics.two), Int.random(in: 0...1_000))
     }
@@ -95,7 +100,9 @@ func benchmarks() {
         benchmark.measurement(.custom(CustomMetrics.two), Int.random(in: 0...1_000))
     }
 
-    Benchmark("Counter 57 iterations", metrics: [.wallClock, .throughput], desiredIterations:57) { benchmark in
+    Benchmark("Counter 57 iterations",
+              metrics: [.wallClock, .throughput],
+              desiredIterations:57) { benchmark in
         dummyCounter(57)
     }
 
@@ -110,25 +117,45 @@ func benchmarks() {
         fatalError("This test is disabled and should not have been run")
     }
 
-    Benchmark("Specific metrics", metrics: [.wallClock, .cpuTotal, .memoryLeaked], desiredDuration: defaultRunTime()) { benchmark in
+    Benchmark("Specific metrics",
+              metrics: [.wallClock, .cpuTotal, .memoryLeaked],
+              desiredDuration: defaultRunTime()) { benchmark in
         dummyCounter(defaultCounter())
     }
 
-    /* There metrics doesn't exist yet, so we will crash if trying to enable them
-    Benchmark("Memory metrics", metrics: BenchmarkMetric.memory, desiredDuration: defaultRunTime()) { benchmark in
+    Benchmark("Memory metrics",
+              metrics: BenchmarkMetric.memory,
+              desiredDuration: defaultRunTime()) { benchmark in
         dummyCounter(defaultCounter())
     }
 
-    Benchmark("Disk metrics", metrics: BenchmarkMetric.disk, desiredDuration: defaultRunTime()) { benchmark in
+    Benchmark("Disk metrics",
+              metrics: BenchmarkMetric.disk,
+              desiredDuration: defaultRunTime()) { benchmark in
         dummyCounter(defaultCounter())
     }
 
-    Benchmark("System metrics", metrics: BenchmarkMetric.system, desiredDuration: defaultRunTime()) { benchmark in
+    Benchmark("System metrics",
+              metrics: BenchmarkMetric.system,
+              desiredDuration: defaultRunTime()) { benchmark in
         dummyCounter(defaultCounter())
     }
 
-    Benchmark("All metrics", metrics: BenchmarkMetric.all, desiredDuration: defaultRunTime()) { benchmark in
-        dummyCounter(defaultCounter())
+    Benchmark("All metrics, full concurrency, async",
+              metrics: BenchmarkMetric.all,
+              desiredDuration: .seconds(5)) { benchmark in
+
+        let _ = await withTaskGroup(of: Void.self, returning: Void.self, body: { taskGroup in
+
+            for _ in 0..<80 {
+                taskGroup.addTask {
+                    dummyCounter(defaultCounter()*1000)
+                }
+            }
+
+            for await _ in taskGroup {
+            }
+
+        })
     }
-*/
 }

@@ -10,7 +10,7 @@ func myInternalDummyCounter(_ count: Int) {
     for x in 0..<count {
         sum += x
     }
-    if Int.random(in: 0...1_000_000) == 4711 { // Make sure optimizer doesn't take us out
+    if Int.random(in: 0...100_000_000) == 4711 { // Make sure optimizer doesn't take us out
         print("\(sum)")
     }
 }
