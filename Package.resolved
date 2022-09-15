@@ -1,6 +1,15 @@
 {
   "pins" : [
     {
+      "identity" : "package-benchmark",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/ordo-one/package-benchmark",
+      "state" : {
+        "revision" : "55a8b54862e120315a9998fcc5404c031d0d7e87",
+        "version" : "0.0.8"
+      }
+    },
+    {
       "identity" : "package-jemalloc",
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/ordo-one/package-jemalloc",
