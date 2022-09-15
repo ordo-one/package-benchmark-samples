@@ -8,6 +8,7 @@
 // http://www.apache.org/licenses/LICENSE-2.0
 //
 
+import SystemPackage
 import Foundation
 import BenchmarkSupport
 @main extension BenchmarkRunner {}
