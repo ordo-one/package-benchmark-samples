@@ -1,4 +1,4 @@
-name: Swift macOS benchmark
+name: Swift Benchmark
 
 on:
   workflow_dispatch:
@@ -6,21 +6,17 @@ on:
     branches: [ main ]
   pull_request:
     branches: [ main ]
-  
+
 jobs:
-  benchmark-macos:
-    timeout-minutes: 60
-    runs-on: [self-hosted, macos-12, ARM64]
-# [self-hosted, macos-12]
+  benchmark:
+
+    runs-on: ubuntu-latest
 
     steps:
-    - name: Wipe gitconfig
-      run: echo "" > ~/.gitconfig
     - uses: actions/checkout@v3
-    - name: Git URL token override
-      run: git config --global url."https://ordo-ci:${{ secrets.CI_MACHINE_PAT }}@github.com".insteadOf "https://github.com"
-    - name: Swift version
-      run: swift --version
+    - name: Install libjemalloc
+      run: sudo apt-get install -y libjemalloc-dev
+    - name: Set up path so libjemalloc can be found
     - run: echo "/opt/homebrew/bin:/usr/local/bin" >> $GITHUB_PATH
     - name: Compare benchmarks
       id: benchmark
@@ -34,5 +30,3 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.CI_MACHINE_PAT }}
         message: ${{ env.BENCHMARK }}
         comment_includes: 'Benchmark results'
-    - name: Wipe gitconfig
-      run: echo "" > ~/.gitconfig

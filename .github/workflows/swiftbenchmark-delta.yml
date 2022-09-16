@@ -1,4 +1,4 @@
-name: Swift macOS benchmark delta
+name: Swift Benchmark delta vs main
 
 on:
   workflow_dispatch:
@@ -8,25 +8,20 @@ on:
     branches: [ main ]
   
 jobs:
-  benchmark-macos:
-    timeout-minutes: 60
-    runs-on: [self-hosted, macos-12, ARM64]
-    # [self-hosted, macos-12]
+  benchmark-delta:
+
+    runs-on: ubuntu-latest
 
     steps:
-    - name: Wipe gitconfig
-      run: echo "" > ~/.gitconfig
     - uses: actions/checkout@v3
-    - name: Git URL token override
-      run: git config --global url."https://ordo-ci:${{ secrets.CI_MACHINE_PAT }}@github.com".insteadOf "https://github.com"
-    - name: Swift version
-      run: swift --version
+    - name: Install libjemalloc
+      run: sudo apt-get install -y libjemalloc-dev
     - run: echo "/opt/homebrew/bin:/usr/local/bin" >> $GITHUB_PATH
     - name: Run benchmarks
       run: swift package --allow-writing-to-directory .benchmarkBaselines/ benchmark update-baseline pull_request
-#    - name: Switch to main
-#      run: git checkout main
-    - name: Run benchmarks again
+    - name: Switch to main
+      run: git checkout main
+    - name: Run benchmarks for main
       run: swift package --allow-writing-to-directory .benchmarkBaselines/ benchmark update-baseline main
     - name: Compare benchmarks
       id: benchmark
@@ -40,5 +35,3 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.CI_MACHINE_PAT }}
         message: ${{ env.BENCHMARK }}
         comment_includes: 'Comparing results'
-    - name: Wipe gitconfig
-      run: echo "" > ~/.gitconfig
