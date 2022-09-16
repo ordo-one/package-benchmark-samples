@@ -1,4 +1,4 @@
-public struct package_benchmark_samples {
+public struct PackageBenchmarkSamples {
     public private(set) var text = "Hello, World!"
 
     public init() {

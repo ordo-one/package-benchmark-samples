@@ -3,24 +3,26 @@
 import PackageDescription
 
 let package = Package(
-    name: "package-benchmark-samples",
+    name: "PackageBenchmarkSamples",
     platforms: [.macOS(.v12)],
     products: [
         .library(
-            name: "package-benchmark-samples",
-            targets: ["package-benchmark-samples"]),
+            name: "PackageBenchmarkSamples",
+            targets: ["PackageBenchmarkSamples"]),
     ],
     dependencies: [
-        .package(url: "https://github.com/ordo-one/package-benchmark", .upToNextMajor(from: "0.0.8")),
-       // .package(path: "../package-benchmark")
+        // .package(url: "https://github.com/ordo-one/package-benchmark", .upToNextMajor(from: "0.0.8")),
+        .package(path: "../package-benchmark")
     ],
     targets: [
         .target(
-            name: "package-benchmark-samples",
+            name: "PackageBenchmarkSamples",
             dependencies: []),
+
         .testTarget(
-            name: "package-benchmark-samplesTests",
-            dependencies: ["package-benchmark-samples"]),
+            name: "PackageBenchmarkSamplesTests",
+            dependencies: ["PackageBenchmarkSamples"],
+            path:"Tests/PackageBenchmarkSamplesTests"),
 
         // Sample benchmark executable targets, created a handful just to show
         // how benchmarks can be split up.
@@ -39,7 +41,7 @@ let package = Package(
             name: "Samples-Benchmark",
             dependencies: [
                 .product(name: "BenchmarkSupport", package: "package-benchmark"),
-		"package-benchmark-samples"
+                "PackageBenchmarkSamples"
             ],
             path: "Benchmarks/Samples"
         ),

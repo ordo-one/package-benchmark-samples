@@ -11,7 +11,6 @@
 import BenchmarkSupport
 @main extension BenchmarkRunner {}
 
-
 #if os(macOS) || os(iOS) || os(watchOS) || os(tvOS)
 import Darwin
 #elseif os(Linux) || os(FreeBSD) || os(Android)
