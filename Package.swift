@@ -5,27 +5,24 @@ import PackageDescription
 let package = Package(
     name: "PackageBenchmarkSamples",
     platforms: [.macOS(.v12)],
+
     products: [
         .library(
             name: "PackageBenchmarkSamples",
             targets: ["PackageBenchmarkSamples"]),
     ],
+
     dependencies: [
-        .package(url: "https://github.com/ordo-one/package-benchmark", .upToNextMajor(from: "0.0.8")),
+        .package(url: "https://github.com/ordo-one/package-benchmark", .upToNextMajor(from: "0.0.9")),
         // .package(path: "../package-benchmark")
     ],
+
     targets: [
         .target(
             name: "PackageBenchmarkSamples",
             dependencies: []),
 
-        .testTarget(
-            name: "PackageBenchmarkSamplesTests",
-            dependencies: ["PackageBenchmarkSamples"],
-            path:"Tests/PackageBenchmarkSamplesTests"),
-
-        // Sample benchmark executable targets, created a handful just to show
-        // how benchmarks can be split up.
+        // Sample benchmark executable targets, a few displaying how benchmarks can be split up.
 
         // Absolute minimal boilerplate
         .executableTarget(
