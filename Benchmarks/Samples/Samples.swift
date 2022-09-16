@@ -10,7 +10,18 @@
 
 @testable import PackageBenchmarkSamples
 
+#if canImport(Darwin)
+import Darwin
+typealias DirectoryStreamPointer = UnsafeMutablePointer<DIR>?
+#elseif canImport(Glibc)
+import Glibc
+typealias DirectoryStreamPointer = OpaquePointer?
+#else
+#error("Unsupported Platform")
+#endif
+
 import BenchmarkSupport
+import SystemPackage
 @main extension BenchmarkRunner {}
 
 @_dynamicReplacement(for: registerBenchmarks)
@@ -129,10 +140,24 @@ func benchmarks() {
         dummyCounter(defaultCounter())
     }
 
-    Benchmark("Disk metrics",
+    Benchmark("Disk metrics, writing 64K x 1.000",
               metrics: BenchmarkMetric.disk,
-              desiredDuration: defaultRunTime()) { benchmark in
-        dummyCounter(defaultCounter())
+              scalingFactor: .kilo,
+              desiredDuration: .seconds(5)) { benchmark in
+        do {
+            let fileDescriptor = FileDescriptor(rawValue: fileno(tmpfile()))
+            let data = [UInt8].init(repeating: 47, count: 64*1_024)
+
+            benchmark.startMeasurement()
+
+            try fileDescriptor.closeAfter {
+                try data.withUnsafeBufferPointer {
+                    for _ in 0..<benchmark.scalingFactor.rawValue {
+                        _ = try fileDescriptor.write(UnsafeRawBufferPointer($0))
+                    }
+                }
+            }
+        } catch { }
     }
 
     Benchmark("System metrics",

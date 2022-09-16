@@ -11,8 +11,8 @@ let package = Package(
             targets: ["PackageBenchmarkSamples"]),
     ],
     dependencies: [
-        // .package(url: "https://github.com/ordo-one/package-benchmark", .upToNextMajor(from: "0.0.8")),
-        .package(path: "../package-benchmark")
+        .package(url: "https://github.com/ordo-one/package-benchmark", .upToNextMajor(from: "0.0.8")),
+        // .package(path: "../package-benchmark")
     ],
     targets: [
         .target(
