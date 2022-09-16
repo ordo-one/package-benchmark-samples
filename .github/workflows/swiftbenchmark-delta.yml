@@ -14,10 +14,10 @@ jobs:
 
     steps:
       - uses: actions/checkout@v3
-      - name: Install jemalloc
-        run: |
-          /usr/bin/sudo apt-get update
-          /usr/bin/sudo apt-get install jemalloc-dev
+#      - name: Install jemalloc
+#        run: |
+#          /usr/bin/sudo apt-get update
+#          /usr/bin/sudo apt-get install jemalloc-dev
 #    - name: Install sudo package
 #      run: apt update && apt install sudo
 #    - name: Install libjemalloc

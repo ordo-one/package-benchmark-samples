@@ -14,17 +14,17 @@ jobs:
 
     steps:
       - uses: actions/checkout@v3
-      - name: Install jemalloc
-        run: |
-          /usr/bin/sudo apt-get update
-          /usr/bin/sudo apt-get install jemalloc-dev
+#      - name: Install jemalloc
+#        run: |
+#          /usr/bin/sudo apt-get update
+#          /usr/bin/sudo apt-get install jemalloc-dev
 #    - name: Install sudo package
 #      run: apt update && apt install sudo
 #    - name: Install libjemalloc
 #      run: sudo apt-get install -y libjemalloc-dev
     - run: echo "/opt/homebrew/bin:/usr/local/bin" >> $GITHUB_PATH
-    - name: Install libjemalloc
-      run: brew install jemalloc
+#    - name: Install libjemalloc
+#      run: brew install jemalloc
     - name: Set up path so libjemalloc can be found
     - name: Compare benchmarks
       id: benchmark
