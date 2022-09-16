@@ -14,10 +14,12 @@ jobs:
 
     steps:
     - uses: actions/checkout@v3
-    - name: Install sudo package
-      run: apt update && apt install sudo
+#    - name: Install sudo package
+#      run: apt update && apt install sudo
+#    - name: Install libjemalloc
+#      run: sudo apt-get install -y libjemalloc-dev
     - name: Install libjemalloc
-      run: sudo apt-get install -y libjemalloc-dev
+      run: brew install jemalloc
     - run: echo "/opt/homebrew/bin:/usr/local/bin" >> $GITHUB_PATH
     - name: Run benchmarks
       run: swift package --allow-writing-to-directory .benchmarkBaselines/ benchmark update-baseline pull_request
