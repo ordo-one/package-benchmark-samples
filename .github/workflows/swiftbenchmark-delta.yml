@@ -41,5 +41,7 @@ jobs:
         uses: thollander/actions-comment-pull-request@v1
         with:
           GITHUB_TOKEN: ${{ secrets.CI_MACHINE_PAT }}
-          message: ${{ env.BENCHMARK }}
+          message: https://github.com/ordo-one/${{ github.event.repository.name }}/actions/runs/${{ github.run_id }}/jobs/${{ github.job_id }}
+#          https://github.com/ordo-one/package-benchmark-samples/actions/runs/3069235225/jobs/4980013160
+# ${{ env.BENCHMARK }}
           comment_includes: 'Comparing results'
