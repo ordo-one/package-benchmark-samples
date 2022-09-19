@@ -34,3 +34,4 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.CI_MACHINE_PAT }}
           message: "[Latest Benchmark details here](https://github.com/ordo-one/${{ github.event.repository.name }}/actions/runs/${{ github.run_id }})"
           comment_includes: 'Latest Benchmark details here'
+          comment_includes: 'Comparing results'
