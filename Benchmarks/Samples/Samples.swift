@@ -33,7 +33,7 @@ func benchmarks() {
         static var two: String { "CustomTwo" }
     }
 
-    func defaultRunTime() -> TimeDuration { .milliseconds(50)}
+    func defaultRunTime() -> TimeDuration { .milliseconds(25)}
     @Sendable func defaultCounter() -> Int { 1_000 }
     @Sendable func dummyCounter(_ count: Int) {
         for x in 0..<count {
