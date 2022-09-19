@@ -168,11 +168,11 @@ func benchmarks() {
 
     Benchmark("All metrics, full concurrency, async",
               metrics: BenchmarkMetric.all,
-              desiredDuration: .seconds(5)) { benchmark in
+              desiredDuration: .seconds(1)) { benchmark in
 
         let _ = await withTaskGroup(of: Void.self, returning: Void.self, body: { taskGroup in
 
-            for _ in 0..<80 {
+            for _ in 0..<1 {
                 taskGroup.addTask {
                     dummyCounter(defaultCounter()*1000)
                 }
