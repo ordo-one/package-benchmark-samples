@@ -1,4 +1,4 @@
-name: Swift Benchmark
+name: Benchmark baseline
 
 on:
   workflow_dispatch:
