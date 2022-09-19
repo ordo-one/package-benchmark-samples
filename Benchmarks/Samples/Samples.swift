@@ -34,7 +34,7 @@ func benchmarks() {
     }
 
     func defaultRunTime() -> TimeDuration { .milliseconds(100)}
-    @Sendable func defaultCounter() -> Int { 10_000 }
+    @Sendable func defaultCounter() -> Int { 7_000 }
     @Sendable func dummyCounter(_ count: Int) {
         for x in 0..<count {
             blackHole(x)
@@ -143,7 +143,7 @@ func benchmarks() {
     Benchmark("Disk metrics, writing 64K x 1.000",
               metrics: BenchmarkMetric.disk,
               scalingFactor: .kilo,
-              desiredDuration: .seconds(5)) { benchmark in
+              desiredDuration: .seconds(1)) { benchmark in
         do {
             let fileDescriptor = FileDescriptor(rawValue: fileno(tmpfile()))
             let data = [UInt8].init(repeating: 47, count: 64*1_024)
