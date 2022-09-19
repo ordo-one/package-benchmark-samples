@@ -34,7 +34,8 @@ jobs:
         id: prtest
         run: |
           echo 'PRTEST<<EOF' >> $GITHUB_ENV
-          echo "Benchmarks last run at $(date -I seconds) [Latest details here](https://github.com/ordo-one/${{ github.event.repository.name }}/actions/runs/${{ github.run_id }})" >> $GITHUB_ENV
+          echo "Benchmarks last run at $(date -I seconds)" >> $GITHUB_ENV
+          echo "[Latest details here](https://github.com/ordo-one/${{ github.event.repository.name }}/actions/runs/${{ github.run_id }})" >> $GITHUB_ENV
           echo 'EOF' >> $GITHUB_ENV
       - name: Comment PR
         uses: thollander/actions-comment-pull-request@v1
