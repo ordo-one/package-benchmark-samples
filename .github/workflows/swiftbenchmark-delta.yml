@@ -14,19 +14,7 @@ jobs:
 
     steps:
       - uses: actions/checkout@v3
-        with:
-          fetch-depth: 0
-#      - name: Install jemalloc
-#        run: |
-#          /usr/bin/sudo apt-get update
-#          /usr/bin/sudo apt-get install jemalloc-dev
-#    - name: Install sudo package
-#      run: apt update && apt install sudo
-#    - name: Install libjemalloc
-#      run: sudo apt-get install -y libjemalloc-dev
       - run: echo "/opt/homebrew/bin:/usr/local/bin" >> $GITHUB_PATH
-#    - name: Install libjemalloc
-#      run: brew install jemalloc
       - name: Run benchmarks
         run: swift package --allow-writing-to-directory .benchmarkBaselines/ benchmark update-baseline pull_request
       - name: Stash package.resolved
@@ -38,12 +26,11 @@ jobs:
       - name: Compare benchmarks
         id: benchmark
         run: |
-          echo 'BENCHMARK<<EOF' >> $GITHUB_ENV
-          swift package benchmark compare main pull_request --format markdown >> $GITHUB_ENV
-          echo 'EOF' >> $GITHUB_ENV
+          echo $(date) >> $GITHUB_STEP_SUMMARY
+          swift package benchmark compare main pull_request --format markdown >> $GITHUB_STEP_SUMMARY
       - name: Comment PR
         uses: thollander/actions-comment-pull-request@v1
         with:
           GITHUB_TOKEN: ${{ secrets.CI_MACHINE_PAT }}
-          message: ${{ env.BENCHMARK }}
-          comment_includes: 'Comparing results'
+          message: "[Latest Benchmark details here](https://github.com/ordo-one/${{ github.event.repository.name }}/actions/runs/${{ github.run_id }})"
+          comment_includes: 'Latest Benchmark details here'
