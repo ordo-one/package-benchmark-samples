@@ -1,4 +1,4 @@
-name: Swift Benchmark delta vs main
+name: Benchmark PR vs main
 
 on:
   workflow_dispatch:
