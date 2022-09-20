@@ -27,10 +27,10 @@ import SystemPackage
 @_dynamicReplacement(for: registerBenchmarks)
 func benchmarks() {
 
-    // Some helper stuff
+    // A way to define custom metrics fairly compact
     struct CustomMetrics {
-        static var one: String { "CustomOne" }
-        static var two: String { "CustomTwo" }
+        static var one: BenchmarkMetric { .custom("CustomMetricOne") }
+        static var two: BenchmarkMetric { .custom("CustomMetricTwo", polarity: .prefersLarger) }
     }
 
     func defaultRunTime() -> TimeDuration { .milliseconds(20)}
@@ -97,18 +97,18 @@ func benchmarks() {
     }
 
     Benchmark("Custom metrics",
-              metrics: [.custom(CustomMetrics.one), .custom(CustomMetrics.two)],
+              metrics: [CustomMetrics.one, CustomMetrics.two],
               desiredDuration: defaultRunTime()) { benchmark in
-        benchmark.measurement(.custom(CustomMetrics.one), Int.random(in: 0...1_000_000))
-        benchmark.measurement(.custom(CustomMetrics.two), Int.random(in: 0...1_000))
+        benchmark.measurement(CustomMetrics.one, Int.random(in: 0...1_000_000))
+        benchmark.measurement(CustomMetrics.two, Int.random(in: 0...1_000))
     }
 
     Benchmark("Extended + custom metrics",
-              metrics: BenchmarkMetric.extended + [.custom(CustomMetrics.one), .custom(CustomMetrics.two)],
+              metrics: BenchmarkMetric.extended + [CustomMetrics.one, CustomMetrics.two],
               desiredDuration: defaultRunTime()) { benchmark in
         dummyCounter(defaultCounter())
-        benchmark.measurement(.custom(CustomMetrics.one), Int.random(in: 0...1_000_000))
-        benchmark.measurement(.custom(CustomMetrics.two), Int.random(in: 0...1_000))
+        benchmark.measurement(CustomMetrics.one, Int.random(in: 0...1_000_000))
+        benchmark.measurement(CustomMetrics.two, Int.random(in: 0...1_000))
     }
 
     Benchmark("Counter 57 iterations",

@@ -59,4 +59,8 @@ func benchmarks() {
         performAllocations(count: 1, size:32*1024*1024)
     }
 
+    Benchmark("Failing benchmark") { benchmark in
+    //    benchmark.error("This benchmark failed due to reason XXX")
+    }
+
 }
