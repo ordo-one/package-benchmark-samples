@@ -134,12 +134,6 @@ func benchmarks() {
         dummyCounter(defaultCounter())
     }
 
-    Benchmark("Memory metrics",
-              metrics: BenchmarkMetric.memory,
-              desiredDuration: defaultRunTime()) { benchmark in
-        dummyCounter(defaultCounter())
-    }
-
     Benchmark("Disk metrics, writing 64K x 1.000",
               metrics: BenchmarkMetric.disk,
               scalingFactor: .kilo,
@@ -160,21 +154,17 @@ func benchmarks() {
         } catch { }
     }
 
-    Benchmark("System metrics",
-              metrics: BenchmarkMetric.system,
-              desiredDuration: defaultRunTime()) { benchmark in
-        dummyCounter(defaultCounter())
-    }
-
-    Benchmark("All metrics, full concurrency, async",
-              metrics: BenchmarkMetric.all,
-              desiredDuration: .seconds(1)) { benchmark in
-
+    func concurrentWork(tasks: Int = 4, mallocs: Int = 0) async {
         let _ = await withTaskGroup(of: Void.self, returning: Void.self, body: { taskGroup in
 
-            for _ in 0..<1 {
+            for _ in 0..<tasks {
                 taskGroup.addTask {
                     dummyCounter(defaultCounter()*1000)
+                    for _ in 0..<mallocs {
+                        let x = malloc(1024*1024)
+                        blackHole(x)
+                        free(x)
+                    }
                 }
             }
 
@@ -182,5 +172,23 @@ func benchmarks() {
             }
 
         })
+    }
+
+    Benchmark("Memory metrics, async",
+              metrics: BenchmarkMetric.memory,
+              desiredDuration: defaultRunTime()) { benchmark in
+        await concurrentWork(tasks: 10, mallocs: 1000)
+    }
+
+    Benchmark("System metrics, async",
+              metrics: BenchmarkMetric.system,
+              desiredDuration: defaultRunTime()) { benchmark in
+        await concurrentWork(mallocs: 10)
+    }
+
+    Benchmark("All metrics, full concurrency, async",
+              metrics: BenchmarkMetric.all,
+              desiredDuration: .seconds(1)) { benchmark in
+        await concurrentWork(tasks: 80)
     }
 }
