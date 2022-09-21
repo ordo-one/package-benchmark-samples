@@ -122,7 +122,7 @@ func benchmarks() {
               warmup: false,
               desiredIterations:57) { benchmark in
         dummyCounter(57)
-    }
+  }
 
     Benchmark("Counter disabled test", disabled: true) { benchmark in
         fatalError("This test is disabled and should not have been run")
@@ -136,7 +136,7 @@ func benchmarks() {
 
     Benchmark("Disk metrics, writing 64K x 1.000",
               metrics: BenchmarkMetric.disk,
-              scalingFactor: .kilo,
+              throughputScalingFactor: .kilo,
               desiredDuration: .seconds(1)) { benchmark in
         do {
             let fileDescriptor = FileDescriptor(rawValue: fileno(tmpfile()))
@@ -146,7 +146,7 @@ func benchmarks() {
 
             try fileDescriptor.closeAfter {
                 try data.withUnsafeBufferPointer {
-                    for _ in 0..<benchmark.scalingFactor.rawValue {
+                    for _ in 0..<benchmark.throughputScalingFactor.rawValue {
                         _ = try fileDescriptor.write(UnsafeRawBufferPointer($0))
                     }
                 }
