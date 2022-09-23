@@ -20,29 +20,6 @@ func benchmarks() {
               throughputScalingFactor: .mega) { benchmark in
         for _ in 0..<benchmark.throughputScalingFactor.rawValue {
             blackHole(Date())
-            blackHole(Date())
-            blackHole(Date())
-            blackHole(Date())
-            blackHole(Date())
-            blackHole(Date())
-            blackHole(Date())
-            blackHole(Date())
-            blackHole(Date())
-            blackHole(Date())
-            blackHole(Date())
-            blackHole(Date())
-            blackHole(Date())
-            blackHole(Date())
-            blackHole(Date())
-            blackHole(Date())
-            blackHole(Date())
-            blackHole(Date())
-            blackHole(Date())
-            blackHole(Date())
-            blackHole(Date())
-            blackHole(Date())
-            blackHole(Date())
-            blackHole(Date())
         }
     }
 
