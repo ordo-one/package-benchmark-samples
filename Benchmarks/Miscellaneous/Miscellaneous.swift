@@ -39,24 +39,28 @@ func benchmarks() {
 
     Benchmark("Memory transient allocations (1K small, 1001 large, 1M leak)",
               metrics: BenchmarkMetric.memory,
-              scalingFactor: .kilo) { benchmark in
-        performAllocations(count: benchmark.scalingFactor.rawValue, size:10)
-        performAllocations(count: benchmark.scalingFactor.rawValue, size:64*1024)
+              throughputScalingFactor: .kilo) { benchmark in
+        performAllocations(count: benchmark.throughputScalingFactor.rawValue, size:10)
+        performAllocations(count: benchmark.throughputScalingFactor.rawValue, size:64*1024)
         performAllocations(count: 1, size:1024*1024, shouldFree: false)
     }
 
     Benchmark("Memory transient allocations + 1 large leak",
               metrics: BenchmarkMetric.memory,
-              scalingFactor: .kilo) { benchmark in
-        performAllocations(count: benchmark.scalingFactor.rawValue, size:11*1_024*1_024)
+              throughputScalingFactor: .kilo) { benchmark in
+        performAllocations(count: benchmark.throughputScalingFactor.rawValue, size:11*1_024*1_024)
         performAllocations(count: 1, size:32*1024*1024, shouldFree: false)
     }
 
     Benchmark("Memory transient allocations no leak",
               metrics: BenchmarkMetric.memory,
-              scalingFactor: .kilo) { benchmark in
-        performAllocations(count: benchmark.scalingFactor.rawValue, size:11*1_024*1_024)
+              throughputScalingFactor: .kilo) { benchmark in
+        performAllocations(count: benchmark.throughputScalingFactor.rawValue, size:11*1_024*1_024)
         performAllocations(count: 1, size:32*1024*1024)
+    }
+
+    Benchmark("Failing benchmark") { benchmark in
+    //    benchmark.error("This benchmark failed due to reason XXX")
     }
 
 }

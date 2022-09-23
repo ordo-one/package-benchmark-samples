@@ -15,17 +15,35 @@ import BenchmarkSupport
 
 @_dynamicReplacement(for: registerBenchmarks)
 func benchmarks() {
-
-    Benchmark("Foundation Date()", scalingFactor: .mega) { benchmark in
-        for _ in 0..<benchmark.scalingFactor.rawValue {
+    Benchmark("Foundation Date()",
+              metrics: [.wallClock],
+              throughputScalingFactor: .mega) { benchmark in
+        for _ in 0..<benchmark.throughputScalingFactor.rawValue {
+            blackHole(Date())
+            blackHole(Date())
+            blackHole(Date())
+            blackHole(Date())
+            blackHole(Date())
+            blackHole(Date())
+            blackHole(Date())
+            blackHole(Date())
+            blackHole(Date())
+            blackHole(Date())
+            blackHole(Date())
+            blackHole(Date())
+            blackHole(Date())
+            blackHole(Date())
+            blackHole(Date())
+            blackHole(Date())
             blackHole(Date())
         }
     }
 
-    Benchmark("Foundation AttributedString()") { benchmark in
-        var str = AttributedString(String(repeating: "a", count: 100))
-        str += AttributedString(String(repeating: "b", count: 100))
-        str += AttributedString(String(repeating: "c", count: 100))
+    Benchmark("Foundation AttributedString()", disabled: true) { benchmark in
+        let count = 200
+        var str = AttributedString(String(repeating: "a", count: count))
+        str += AttributedString(String(repeating: "b", count: count))
+        str += AttributedString(String(repeating: "c", count: count))
         let idx = str.characters.index(str.startIndex, offsetBy: str.characters.count / 2)
         let toInsert = AttributedString(String(repeating: "c", count: str.characters.count))
 

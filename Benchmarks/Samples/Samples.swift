@@ -27,14 +27,14 @@ import SystemPackage
 @_dynamicReplacement(for: registerBenchmarks)
 func benchmarks() {
 
-    // Some helper stuff
+    // A way to define custom metrics fairly compact
     struct CustomMetrics {
-        static var one: String { "CustomOne" }
-        static var two: String { "CustomTwo" }
+        static var one: BenchmarkMetric { .custom("CustomMetricOne") }
+        static var two: BenchmarkMetric { .custom("CustomMetricTwo", polarity: .prefersLarger) }
     }
 
-    func defaultRunTime() -> TimeDuration { .milliseconds(100)}
-    @Sendable func defaultCounter() -> Int { 10_000 }
+    func defaultRunTime() -> TimeDuration { .milliseconds(20)}
+    @Sendable func defaultCounter() -> Int { 1_000 }
     @Sendable func dummyCounter(_ count: Int) {
         for x in 0..<count {
             blackHole(x)
@@ -97,18 +97,18 @@ func benchmarks() {
     }
 
     Benchmark("Custom metrics",
-              metrics: [.custom(CustomMetrics.one), .custom(CustomMetrics.two)],
+              metrics: [CustomMetrics.one, CustomMetrics.two],
               desiredDuration: defaultRunTime()) { benchmark in
-        benchmark.measurement(.custom(CustomMetrics.one), Int.random(in: 0...1_000_000))
-        benchmark.measurement(.custom(CustomMetrics.two), Int.random(in: 0...1_000))
+        benchmark.measurement(CustomMetrics.one, Int.random(in: 0...1_000_000))
+        benchmark.measurement(CustomMetrics.two, Int.random(in: 0...1_000))
     }
 
     Benchmark("Extended + custom metrics",
-              metrics: BenchmarkMetric.extended + [.custom(CustomMetrics.one), .custom(CustomMetrics.two)],
+              metrics: BenchmarkMetric.extended + [CustomMetrics.one, CustomMetrics.two],
               desiredDuration: defaultRunTime()) { benchmark in
         dummyCounter(defaultCounter())
-        benchmark.measurement(.custom(CustomMetrics.one), Int.random(in: 0...1_000_000))
-        benchmark.measurement(.custom(CustomMetrics.two), Int.random(in: 0...1_000))
+        benchmark.measurement(CustomMetrics.one, Int.random(in: 0...1_000_000))
+        benchmark.measurement(CustomMetrics.two, Int.random(in: 0...1_000))
     }
 
     Benchmark("Counter 57 iterations",
@@ -122,7 +122,7 @@ func benchmarks() {
               warmup: false,
               desiredIterations:57) { benchmark in
         dummyCounter(57)
-    }
+  }
 
     Benchmark("Counter disabled test", disabled: true) { benchmark in
         fatalError("This test is disabled and should not have been run")
@@ -134,16 +134,10 @@ func benchmarks() {
         dummyCounter(defaultCounter())
     }
 
-    Benchmark("Memory metrics",
-              metrics: BenchmarkMetric.memory,
-              desiredDuration: defaultRunTime()) { benchmark in
-        dummyCounter(defaultCounter())
-    }
-
     Benchmark("Disk metrics, writing 64K x 1.000",
               metrics: BenchmarkMetric.disk,
-              scalingFactor: .kilo,
-              desiredDuration: .seconds(5)) { benchmark in
+              throughputScalingFactor: .kilo,
+              desiredDuration: .seconds(1)) { benchmark in
         do {
             let fileDescriptor = FileDescriptor(rawValue: fileno(tmpfile()))
             let data = [UInt8].init(repeating: 47, count: 64*1_024)
@@ -152,7 +146,7 @@ func benchmarks() {
 
             try fileDescriptor.closeAfter {
                 try data.withUnsafeBufferPointer {
-                    for _ in 0..<benchmark.scalingFactor.rawValue {
+                    for _ in 0..<benchmark.throughputScalingFactor.rawValue {
                         _ = try fileDescriptor.write(UnsafeRawBufferPointer($0))
                     }
                 }
@@ -160,21 +154,17 @@ func benchmarks() {
         } catch { }
     }
 
-    Benchmark("System metrics",
-              metrics: BenchmarkMetric.system,
-              desiredDuration: defaultRunTime()) { benchmark in
-        dummyCounter(defaultCounter())
-    }
-
-    Benchmark("All metrics, full concurrency, async",
-              metrics: BenchmarkMetric.all,
-              desiredDuration: .seconds(5)) { benchmark in
-
+    func concurrentWork(tasks: Int = 4, mallocs: Int = 0) async {
         let _ = await withTaskGroup(of: Void.self, returning: Void.self, body: { taskGroup in
 
-            for _ in 0..<80 {
+            for _ in 0..<tasks {
                 taskGroup.addTask {
                     dummyCounter(defaultCounter()*1000)
+                    for _ in 0..<mallocs {
+                        let x = malloc(1024*1024)
+                        blackHole(x)
+                        free(x)
+                    }
                 }
             }
 
@@ -182,5 +172,44 @@ func benchmarks() {
             }
 
         })
+    }
+
+    Benchmark("Memory metrics, async",
+              metrics: BenchmarkMetric.memory,
+              desiredDuration: defaultRunTime()) { benchmark in
+        await concurrentWork(tasks: 10, mallocs: 1000)
+    }
+
+    Benchmark("System metrics, async",
+              metrics: BenchmarkMetric.system,
+              desiredDuration: defaultRunTime()) { benchmark in
+        await concurrentWork(mallocs: 10)
+    }
+
+    Benchmark("All metrics, full concurrency, async",
+              metrics: BenchmarkMetric.all,
+              desiredDuration: .seconds(1)) { benchmark in
+        await concurrentWork(tasks: 80)
+    }
+
+    Benchmark("Counter, standard metric thresholds",
+              metrics: [.wallClock, .throughput],
+              desiredDuration: defaultRunTime(),
+              thresholds: [.wallClock : .relaxed,
+                           .throughput : .strict]) { benchmark in
+        dummyCounter(defaultCounter())
+        dummyCounter(defaultCounter())
+    }
+
+    let customThreshold = BenchmarkResult.PercentileThresholds(relative: [.p50 : 5.0, .p75 : 10.0],
+                                                               absolute: [.p25 : 10, .p50 : 15])
+
+    Benchmark("Counter, custom metric thresholds",
+              metrics: [.wallClock, .throughput],
+              desiredDuration: defaultRunTime(),
+              thresholds: [.wallClock : customThreshold,
+                           .throughput : .default]) { benchmark in
+        dummyCounter(defaultCounter())
+        dummyCounter(defaultCounter())
     }
 }
