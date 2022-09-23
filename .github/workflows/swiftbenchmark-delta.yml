@@ -11,7 +11,8 @@ jobs:
   benchmark-delta:
 
     runs-on: ubuntu-latest
-
+    continue-on-error: true
+    
     steps:
       - uses: actions/checkout@v3
         with:
