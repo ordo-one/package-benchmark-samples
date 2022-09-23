@@ -31,10 +31,9 @@ jobs:
         id: benchmark
         run: |
           echo $(date) >> $GITHUB_STEP_SUMMARY
+          echo "exitStatus=1" >> $GITHUB_ENV
           swift package benchmark compare main pull_request --format markdown >> $GITHUB_STEP_SUMMARY
-          compare_result=$?
-          echo "exitStatus=${compare_result}" >> $GITHUB_ENV
-          echo "Set benchmark return code: ${compare_result}"
+          echo "exitStatus=0" >> $GITHUB_ENV
         continue-on-error: true
       - name: Pull request comment text
         id: prtest
@@ -50,6 +49,6 @@ jobs:
           comment_includes: "Pull request benchmark comparison with"
       - name: Exit with correct status
         run: |
-          echo "Exiting with code ${{ env.env.exitStatus }}"
-          exit ${{ env.env.exitStatus }} 
+          echo "Exiting with code ${{ env.exitStatus }}"
+          exit ${{ env.exitStatus }} 
         
