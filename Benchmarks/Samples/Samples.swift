@@ -191,4 +191,25 @@ func benchmarks() {
               desiredDuration: .seconds(1)) { benchmark in
         await concurrentWork(tasks: 80)
     }
+
+    Benchmark("Counter, standard metric thresholds",
+              metrics: [.wallClock, .throughput],
+              desiredDuration: defaultRunTime(),
+              thresholds: [.wallClock : .relaxed,
+                           .throughput : .strict]) { benchmark in
+        dummyCounter(defaultCounter())
+        dummyCounter(defaultCounter())
+    }
+
+    let customThreshold = BenchmarkResult.PercentileThresholds(relative: [.p50 : 5.0, .p75 : 10.0],
+                                                               absolute: [.p25 : 10, .p50 : 15])
+
+    Benchmark("Counter, custom metric thresholds",
+              metrics: [.wallClock, .throughput],
+              desiredDuration: defaultRunTime(),
+              thresholds: [.wallClock : customThreshold,
+                           .throughput : .default]) { benchmark in
+        dummyCounter(defaultCounter())
+        dummyCounter(defaultCounter())
+    }
 }

@@ -15,14 +15,15 @@ import BenchmarkSupport
 
 @_dynamicReplacement(for: registerBenchmarks)
 func benchmarks() {
-
-    Benchmark("Foundation Date()", throughputScalingFactor: .mega) { benchmark in
+    Benchmark("Foundation Date()",
+              metrics: [.wallClock],
+              throughputScalingFactor: .mega) { benchmark in
         for _ in 0..<benchmark.throughputScalingFactor.rawValue {
             blackHole(Date())
         }
     }
 
-    Benchmark("Foundation AttributedString()") { benchmark in
+    Benchmark("Foundation AttributedString()", disabled: true) { benchmark in
         let count = 200
         var str = AttributedString(String(repeating: "a", count: count))
         str += AttributedString(String(repeating: "b", count: count))
