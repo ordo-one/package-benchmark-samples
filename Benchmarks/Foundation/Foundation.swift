@@ -29,13 +29,6 @@ func benchmarks() {
             blackHole(Date())
             blackHole(Date())
             blackHole(Date())
-            blackHole(Date())
-            blackHole(Date())
-            blackHole(Date())
-            blackHole(Date())
-            blackHole(Date())
-            blackHole(Date())
-            blackHole(Date())
         }
     }
 
