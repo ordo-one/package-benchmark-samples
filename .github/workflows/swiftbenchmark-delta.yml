@@ -12,7 +12,7 @@ jobs:
 
     runs-on: ubuntu-latest
     continue-on-error: true
-    
+
     steps:
       - uses: actions/checkout@v3
         with:
@@ -31,6 +31,8 @@ jobs:
         run: |
           echo $(date) >> $GITHUB_STEP_SUMMARY
           swift package benchmark compare main pull_request --format markdown >> $GITHUB_STEP_SUMMARY
+          compare_result=$?
+          echo "Benchmark return code: ${compare_result}"
       - name: Pull request comment text
         id: prtest
         run: |
