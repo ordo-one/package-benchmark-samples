@@ -19,7 +19,7 @@ func benchmarks() {
                                                                absolute: [.p50 : 170, .p75 : 1200])
 
     Benchmark("Foundation Date()",
-              metrics: [.throughput, .wallClock, .peakMemoryResident],
+              metrics: [.throughput, .wallClock],
               throughputScalingFactor: .mega,
               thresholds: [.throughput : customThreshold, .wallClock : customThreshold]) { benchmark in
         for _ in 0..<benchmark.throughputScalingFactor.rawValue {
