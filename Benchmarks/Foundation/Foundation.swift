@@ -16,7 +16,7 @@ import BenchmarkSupport
 @_dynamicReplacement(for: registerBenchmarks)
 func benchmarks() {
     Benchmark("Foundation Date()",
-              metrics: [.wallClock],
+              metrics: [.throughput],
               throughputScalingFactor: .mega) { benchmark in
         for _ in 0..<benchmark.throughputScalingFactor.rawValue {
             blackHole(Date())
