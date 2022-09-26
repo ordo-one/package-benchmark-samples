@@ -124,7 +124,7 @@ func benchmarks() {
         dummyCounter(57)
   }
 
-    Benchmark("Counter disabled test", disabled: true) { benchmark in
+    Benchmark("Counter disabled test", skip: true) { benchmark in
         fatalError("This test is disabled and should not have been run")
     }
 
