@@ -10,9 +10,13 @@ on:
 jobs:
   benchmark-delta:
 
-    runs-on: ubuntu-latest
+    runs-on: ${{ matrix.os }}
     continue-on-error: true
 
+    strategy:
+      matrix:
+        os: [ubuntu-latest, macos-latest]
+        
     steps:
       - uses: actions/checkout@v3
         with:
@@ -35,11 +39,20 @@ jobs:
           swift package benchmark compare main pull_request --format markdown >> $GITHUB_STEP_SUMMARY
           echo "exitStatus=0" >> $GITHUB_ENV
         continue-on-error: true
-      - name: Pull request comment text
+      - if: ${{ env.exitStatus == '0' }}
+        name: Pull request comment text success
         id: prtest
         run: |
           echo 'PRTEST<<EOF' >> $GITHUB_ENV
           echo "[Pull request benchmark comparison with 'main' run at $(date -Iseconds)](https://github.com/ordo-one/${{ github.event.repository.name }}/actions/runs/${{ github.run_id }})" >> $GITHUB_ENV
+          echo 'EOF' >> $GITHUB_ENV
+      - if: ${{ env.exitStatus == '1' }}
+        name: Pull request comment text failure
+        id: prtest
+        run: |
+          echo 'PRTEST<<EOF' >> $GITHUB_ENV
+          echo "[Pull request benchmark comparison with 'main' run at $(date -Iseconds)](https://github.com/ordo-one/${{ github.event.repository.name }}/actions/runs/${{ github.run_id }})" >> $GITHUB_ENV
+          echo "_Pull request had performance regressions_" >> $GITHUB_ENV
           echo 'EOF' >> $GITHUB_ENV
       - name: Comment PR
         uses: thollander/actions-comment-pull-request@v1
