@@ -41,14 +41,14 @@ jobs:
         continue-on-error: true
       - if: ${{ env.exitStatus == '0' }}
         name: Pull request comment text success
-        id: prtest
+        id: prtestsuccess
         run: |
           echo 'PRTEST<<EOF' >> $GITHUB_ENV
           echo "[Pull request benchmark comparison with 'main' run at $(date -Iseconds)](https://github.com/ordo-one/${{ github.event.repository.name }}/actions/runs/${{ github.run_id }})" >> $GITHUB_ENV
           echo 'EOF' >> $GITHUB_ENV
       - if: ${{ env.exitStatus == '1' }}
         name: Pull request comment text failure
-        id: prtest
+        id: prtestfailure
         run: |
           echo 'PRTEST<<EOF' >> $GITHUB_ENV
           echo "[Pull request benchmark comparison with 'main' run at $(date -Iseconds)](https://github.com/ordo-one/${{ github.event.repository.name }}/actions/runs/${{ github.run_id }})" >> $GITHUB_ENV
