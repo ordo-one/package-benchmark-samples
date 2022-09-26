@@ -5,8 +5,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/ordo-one/package-benchmark",
       "state" : {
-        "revision" : "13055f24bfc00fa4faa457dc5246cff00a767027",
-        "version" : "0.2.0"
+        "revision" : "8ee79cd4228c0d9d5fc1ed821044fed2a3ea1a2f",
+        "version" : "0.2.1"
       }
     },
     {
@@ -57,7 +57,7 @@
     {
       "identity" : "texttable",
       "kind" : "remoteSourceControl",
-      "location" : "https://github.com/hassila/TextTable",
+      "location" : "https://github.com/ordo-one/TextTable",
       "state" : {
         "revision" : "e03289289155b4e7aa565e32862f9cb42140596a",
         "version" : "0.0.1"
