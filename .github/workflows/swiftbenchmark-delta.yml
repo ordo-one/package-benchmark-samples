@@ -21,6 +21,12 @@ jobs:
       - uses: actions/checkout@v3
         with:
           fetch-depth: 0
+      - name: Install jemalloc Linux
+        if: matrix.os == 'ubuntu-latest'
+        run: sudo apt-get install -y libjemalloc-dev
+      - name: Install jemalloc macOS
+        if: matrix.os == 'macos-12'
+        run: brew install jemalloc
       - name: Setup
         run: echo "/opt/homebrew/bin:/usr/local/bin" >> $GITHUB_PATH
       - name: Run benchmarks for PR
