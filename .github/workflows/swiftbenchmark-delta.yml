@@ -63,7 +63,7 @@ jobs:
       - name: Comment PR
         uses: thollander/actions-comment-pull-request@v1
         with:
-          GITHUB_TOKEN: ${{ secrets.CI_MACHINE_PAT }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           message: ${{ env.PRTEST }}
           comment_includes: "Pull request benchmark comparison [${{ matrix.os }}] with"
       - name: Exit with correct status
