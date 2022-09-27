@@ -18,7 +18,7 @@ func benchmarks() {
     Benchmark("Foundation Date()",
               metrics: [.throughput, .wallClock],
               throughputScalingFactor: .mega) { benchmark in
-        for _ in 0..<benchmark.throughputScalingFactor.rawValue {
+        for _ in 0..<benchmark.throughputScalingFactor.rawValue * 3 { // regression on purpose
             blackHole(Date())
         }
     }
