@@ -21,10 +21,10 @@ jobs:
         with:
           fetch-depth: 0
       - name: Install jemalloc Linux
-        if: ${{ matrix.os }} == "ubuntu-latest"
+        if: matrix.os == 'ubuntu-latest'
         run: sudo apt-get install -y libjemalloc-dev
       - name: Install jemalloc macOS
-        if: ${{ matrix.os }} == "macos-12"
+        if: matrix.os == 'macos-12'
         run: brew install jemalloc
       - run: echo "/opt/homebrew/bin:/usr/local/bin" >> $GITHUB_PATH
       - name: Run benchmarks
