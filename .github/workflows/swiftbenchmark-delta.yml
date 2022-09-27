@@ -15,12 +15,15 @@ jobs:
 
     strategy:
       matrix:
-        os: [ubuntu-latest, macos-12]
+        os: [ubuntu-latest]
+        # , macos-12]
         
     steps:
       - uses: actions/checkout@v3
         with:
           fetch-depth: 0
+      - name: Install jemalloc Linux
+        run: sudo apt-get install -y libjemalloc-dev
       - name: Setup
         run: echo "/opt/homebrew/bin:/usr/local/bin" >> $GITHUB_PATH
       - name: Run benchmarks for PR
@@ -57,7 +60,7 @@ jobs:
       - name: Comment PR
         uses: thollander/actions-comment-pull-request@v1
         with:
-          GITHUB_TOKEN: ${{ secrets.CI_MACHINE_PAT }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           message: ${{ env.PRTEST }}
           comment_includes: "Pull request benchmark comparison [${{ matrix.os }}] with"
       - name: Exit with correct status
