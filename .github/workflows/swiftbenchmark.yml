@@ -16,6 +16,8 @@ jobs:
       - uses: actions/checkout@v3
         with:
           fetch-depth: 0
+      - name: Install jemalloc Linux
+        run: sudo apt-get install -y libjemalloc-dev
       - run: echo "/opt/homebrew/bin:/usr/local/bin" >> $GITHUB_PATH
       - name: Run benchmarks
         id: benchmark
