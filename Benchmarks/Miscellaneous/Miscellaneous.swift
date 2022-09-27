@@ -58,9 +58,4 @@ func benchmarks() {
         performAllocations(count: benchmark.throughputScalingFactor.rawValue, size:11*1_024*1_024)
         performAllocations(count: 1, size:32*1024*1024)
     }
-
-    Benchmark("Failing benchmark") { benchmark in
-    //    benchmark.error("This benchmark failed due to reason XXX")
-    }
-
 }

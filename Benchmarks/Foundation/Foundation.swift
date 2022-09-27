@@ -15,19 +15,15 @@ import BenchmarkSupport
 
 @_dynamicReplacement(for: registerBenchmarks)
 func benchmarks() {
-    let customThreshold = BenchmarkResult.PercentileThresholds(relative: [.p50 : 13.0, .p75 : 18.0],
-                                                               absolute: [.p50 : 170, .p75 : 1200])
-
     Benchmark("Foundation Date()",
               metrics: [.throughput, .wallClock],
-              throughputScalingFactor: .mega,
-              thresholds: [.throughput : customThreshold, .wallClock : customThreshold]) { benchmark in
+              throughputScalingFactor: .mega) { benchmark in
         for _ in 0..<benchmark.throughputScalingFactor.rawValue {
             blackHole(Date())
         }
     }
 
-    Benchmark("Foundation AttributedString()", skip: false) { benchmark in
+    Benchmark("Foundation AttributedString()") { benchmark in
         let count = 200
         var str = AttributedString(String(repeating: "a", count: count))
         str += AttributedString(String(repeating: "b", count: count))

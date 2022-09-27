@@ -122,6 +122,9 @@ func benchmarks() {
               warmup: false,
               desiredIterations:57) { benchmark in
         dummyCounter(57)
+        if benchmark.currentIteration > 57 {
+            fatalError("benchmark.currentIteration > 57!")
+        }
   }
 
     Benchmark("Counter disabled test", skip: true) { benchmark in
@@ -203,13 +206,21 @@ func benchmarks() {
 
     let customThreshold = BenchmarkResult.PercentileThresholds(relative: [.p50 : 5.0, .p75 : 10.0],
                                                                absolute: [.p25 : 10, .p50 : 15])
+    let customThreshold2 = BenchmarkResult.PercentileThresholds(relative: .strict)
+    let customThreshold3 = BenchmarkResult.PercentileThresholds(absolute: .relaxed)
 
     Benchmark("Counter, custom metric thresholds",
-              metrics: [.wallClock, .throughput],
+              metrics: [.wallClock, .throughput, .cpuTotal, .cpuUser],
               desiredDuration: defaultRunTime(),
               thresholds: [.wallClock : customThreshold,
-                           .throughput : .default]) { benchmark in
+                           .throughput : customThreshold2,
+                           .cpuTotal: customThreshold3,
+                           .cpuUser: .strict]) { benchmark in
         dummyCounter(defaultCounter())
         dummyCounter(defaultCounter())
+    }
+
+    Benchmark("Failing benchmark") { benchmark in
+        //    benchmark.error("This benchmark failed due to reason XXX")
     }
 }
