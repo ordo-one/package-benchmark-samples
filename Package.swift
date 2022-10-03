@@ -14,6 +14,7 @@ let package = Package(
 
     dependencies: [
         .package(url: "https://github.com/ordo-one/package-benchmark", .upToNextMajor(from: "0.3.0")),
+        // .package(path: "../package-benchmark")
     ],
 
     targets: [
@@ -25,7 +26,7 @@ let package = Package(
 
         // Absolute minimal boilerplate
         .executableTarget(
-            name: "Minimal-Benchmark",
+            name: "Minimal",
             dependencies: [
                 .product(name: "BenchmarkSupport", package: "package-benchmark"),
             ],
@@ -34,7 +35,7 @@ let package = Package(
 
         // Sample showing wide range of API usage
         .executableTarget(
-            name: "Samples-Benchmark",
+            name: "Samples",
             dependencies: [
                 .product(name: "BenchmarkSupport", package: "package-benchmark"),
                 "PackageBenchmarkSamples"
@@ -44,7 +45,7 @@ let package = Package(
 
         // Some miscellaneous tests for edge conditions
         .executableTarget(
-            name: "Miscellaneous-Benchmark",
+            name: "Miscellaneous",
             dependencies: [
                 .product(name: "BenchmarkSupport", package: "package-benchmark"),
             ],

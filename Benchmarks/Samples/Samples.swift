@@ -99,16 +99,16 @@ func benchmarks() {
     Benchmark("Custom metrics",
               metrics: [CustomMetrics.one, CustomMetrics.two],
               desiredDuration: defaultRunTime()) { benchmark in
-        benchmark.measurement(CustomMetrics.one, Int.random(in: 0...1_000_000))
-        benchmark.measurement(CustomMetrics.two, Int.random(in: 0...1_000))
+        benchmark.measurement(CustomMetrics.one, Int.random(in: 1...1_000_000))
+        benchmark.measurement(CustomMetrics.two, Int.random(in: 1...1_000))
     }
 
     Benchmark("Extended + custom metrics",
               metrics: BenchmarkMetric.extended + [CustomMetrics.one, CustomMetrics.two],
               desiredDuration: defaultRunTime()) { benchmark in
         dummyCounter(defaultCounter())
-        benchmark.measurement(CustomMetrics.one, Int.random(in: 0...1_000_000))
-        benchmark.measurement(CustomMetrics.two, Int.random(in: 0...1_000))
+        benchmark.measurement(CustomMetrics.one, Int.random(in: 1...1_000_000))
+        benchmark.measurement(CustomMetrics.two, Int.random(in: 1...1_000))
     }
 
     Benchmark("Counter 57 iterations",
@@ -149,7 +149,7 @@ func benchmarks() {
 
             try fileDescriptor.closeAfter {
                 try data.withUnsafeBufferPointer {
-                    for _ in 0..<benchmark.throughputScalingFactor.rawValue {
+                    for _ in benchmark.throughputIterations {
                         _ = try fileDescriptor.write(UnsafeRawBufferPointer($0))
                     }
                 }
