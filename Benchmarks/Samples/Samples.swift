@@ -33,7 +33,8 @@ func benchmarks() {
         static var two: BenchmarkMetric { .custom("CustomMetricTwo", polarity: .prefersLarger) }
     }
 
-    func defaultRunTime() -> TimeDuration { .milliseconds(20)}
+    Benchmark.defaultDesiredDuration = .milliseconds(20)
+
     @Sendable func defaultCounter() -> Int { 1_000 }
     @Sendable func dummyCounter(_ count: Int) {
         for x in 0..<count {
@@ -43,34 +44,31 @@ func benchmarks() {
 
     // The actual benchmarks
 
-    Benchmark("myInternalDummyCounter", metrics: [.wallClock, .throughput], desiredDuration: defaultRunTime()) { benchmark in
+    Benchmark("myInternalDummyCounter", metrics: [.wallClock, .throughput]) { benchmark in
         myInternalDummyCounter(defaultCounter()) // Calls the function internal to the library target using @testable import
     }
 
-    Benchmark("Counter", metrics: [.wallClock, .throughput], desiredDuration: defaultRunTime()) { benchmark in
+    Benchmark("Counter", metrics: [.wallClock, .throughput]) { benchmark in
         dummyCounter(defaultCounter())
         dummyCounter(defaultCounter())
     }
 
     Benchmark("Counter no init (should be ~2x faster than Counter)",
-              metrics: [.wallClock, .throughput],
-              desiredDuration: defaultRunTime()) { benchmark in
+              metrics: [.wallClock, .throughput]) { benchmark in
         dummyCounter(defaultCounter())
         benchmark.startMeasurement() // don't include setup
         dummyCounter(defaultCounter())
     }
 
     Benchmark("Counter no deinit (should be ~2x faster than Counter)",
-              metrics: [.wallClock, .throughput],
-              desiredDuration: defaultRunTime()) { benchmark in
+              metrics: [.wallClock, .throughput]) { benchmark in
         dummyCounter(defaultCounter())
         benchmark.stopMeasurement() // skip cleanup
         dummyCounter(defaultCounter())
     }
 
     Benchmark("Counter no init/deinit (should be ~2x faster than Counter)",
-              metrics: [.wallClock, .throughput],
-              desiredDuration: defaultRunTime()) { benchmark in
+              metrics: [.wallClock, .throughput]) { benchmark in
         dummyCounter(defaultCounter())
         benchmark.startMeasurement() // skip both setup
         dummyCounter(defaultCounter())
@@ -83,29 +81,25 @@ func benchmarks() {
     }
 
     Benchmark("Extended metrics",
-              metrics: BenchmarkMetric.extended,
-              desiredDuration: defaultRunTime()) { benchmark in
+              metrics: BenchmarkMetric.extended) { benchmark in
         dummyCounter(defaultCounter())
     }
 
     Benchmark("Counter force nanoseconds (result may be power-of-two)",
               metrics: [.wallClock, .throughput],
-              timeUnits: .nanoseconds,
-              desiredDuration: defaultRunTime()) { benchmark in
+              timeUnits: .nanoseconds) { benchmark in
         dummyCounter(defaultCounter())
         dummyCounter(defaultCounter())
     }
 
     Benchmark("Custom metrics",
-              metrics: [CustomMetrics.one, CustomMetrics.two],
-              desiredDuration: defaultRunTime()) { benchmark in
+              metrics: [CustomMetrics.one, CustomMetrics.two]) { benchmark in
         benchmark.measurement(CustomMetrics.one, Int.random(in: 1...1_000_000))
         benchmark.measurement(CustomMetrics.two, Int.random(in: 1...1_000))
     }
 
     Benchmark("Extended + custom metrics",
-              metrics: BenchmarkMetric.extended + [CustomMetrics.one, CustomMetrics.two],
-              desiredDuration: defaultRunTime()) { benchmark in
+              metrics: BenchmarkMetric.extended + [CustomMetrics.one, CustomMetrics.two]) { benchmark in
         dummyCounter(defaultCounter())
         benchmark.measurement(CustomMetrics.one, Int.random(in: 1...1_000_000))
         benchmark.measurement(CustomMetrics.two, Int.random(in: 1...1_000))
@@ -119,7 +113,7 @@ func benchmarks() {
 
     Benchmark("Counter 57 iterations no warmup",
               metrics: [.wallClock, .throughput],
-              warmup: false,
+              warmupIterations: 0,
               desiredIterations:57) { benchmark in
         dummyCounter(57)
         if benchmark.currentIteration > 57 {
@@ -132,8 +126,7 @@ func benchmarks() {
     }
 
     Benchmark("Specific metrics",
-              metrics: [.wallClock, .cpuTotal, .memoryLeaked],
-              desiredDuration: defaultRunTime()) { benchmark in
+              metrics: [.wallClock, .cpuTotal, .memoryLeaked]) { benchmark in
         dummyCounter(defaultCounter())
     }
 
@@ -178,14 +171,12 @@ func benchmarks() {
     }
 
     Benchmark("Memory metrics, async",
-              metrics: BenchmarkMetric.memory,
-              desiredDuration: defaultRunTime()) { benchmark in
+              metrics: BenchmarkMetric.memory) { benchmark in
         await concurrentWork(tasks: 10, mallocs: 1000)
     }
 
     Benchmark("System metrics, async",
-              metrics: BenchmarkMetric.system,
-              desiredDuration: defaultRunTime()) { benchmark in
+              metrics: BenchmarkMetric.system) { benchmark in
         await concurrentWork(mallocs: 10)
     }
 
@@ -197,7 +188,6 @@ func benchmarks() {
 
     Benchmark("Counter, standard metric thresholds",
               metrics: [.wallClock, .throughput],
-              desiredDuration: defaultRunTime(),
               thresholds: [.wallClock : .relaxed,
                            .throughput : .strict]) { benchmark in
         dummyCounter(defaultCounter())
@@ -211,7 +201,6 @@ func benchmarks() {
 
     Benchmark("Counter, custom metric thresholds",
               metrics: [.wallClock, .throughput, .cpuTotal, .cpuUser],
-              desiredDuration: defaultRunTime(),
               thresholds: [.wallClock : customThreshold,
                            .throughput : customThreshold2,
                            .cpuTotal: customThreshold3,

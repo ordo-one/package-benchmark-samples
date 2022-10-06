@@ -16,7 +16,17 @@ import BenchmarkSupport
 @_dynamicReplacement(for: registerBenchmarks)
 func benchmarks() {
 
-    Benchmark.defaultBenchmarkTimeUnits = .microseconds
+    Benchmark.defaultTimeUnits = .microseconds
+
+    let customThreshold = BenchmarkResult.PercentileThresholds(relative: [.p50 : 5.0, .p75 : 10.0],
+                                                               absolute: [.p25 : 10, .p50 : 15])
+    let customThreshold2 = BenchmarkResult.PercentileThresholds(relative: .strict)
+    let customThreshold3 = BenchmarkResult.PercentileThresholds(absolute: .relaxed)
+
+    Benchmark.defaultThresholds = [.wallClock : customThreshold,
+                                   .throughput : customThreshold2,
+                                   .cpuTotal: customThreshold3,
+                                   .cpuUser: .strict]
 
     Benchmark("Foundation Date()",
               metrics: [.throughput, .wallClock],
