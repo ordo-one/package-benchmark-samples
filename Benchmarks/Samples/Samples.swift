@@ -68,7 +68,7 @@ func benchmarks() {
         dummyCounter(defaultCounter())
     }
 
-    Benchmark("Counter no init (should be ~2x faster than Counter)",
+    Benchmark("Counter no init/deinit (should be ~2x faster than Counter)",
               metrics: [.wallClock, .throughput],
               desiredDuration: defaultRunTime()) { benchmark in
         dummyCounter(defaultCounter())
@@ -88,7 +88,7 @@ func benchmarks() {
         dummyCounter(defaultCounter())
     }
 
-    Benchmark("Counter force nanoseconds (result will be power-of-two)",
+    Benchmark("Counter force nanoseconds (result may be power-of-two)",
               metrics: [.wallClock, .throughput],
               timeUnits: .nanoseconds,
               desiredDuration: defaultRunTime()) { benchmark in

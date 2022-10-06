@@ -15,6 +15,9 @@ import BenchmarkSupport
 
 @_dynamicReplacement(for: registerBenchmarks)
 func benchmarks() {
+
+    Benchmark.defaultBenchmarkTimeUnits = .microseconds
+
     Benchmark("Foundation Date()",
               metrics: [.throughput, .wallClock],
               throughputScalingFactor: .mega) { benchmark in
