@@ -17,16 +17,14 @@ import Foundation
 func benchmarks() {
 
     Benchmark.defaultMetrics = BenchmarkMetric.memory
-    Benchmark.defaultDesiredIterations = 100_000
+    Benchmark.defaultDesiredDuration = .seconds(3)
 
-    Benchmark("Weak Capture Memory") { benchmark in
+    Benchmark("Weak Capture Memory", throughputScalingFactor: .kilo) { benchmark in
         for _ in benchmark.throughputIterations {
             BenchmarkSupport.blackHole(WeakCaptureEncoder())
         }
     }
 }
-
-public class Foo: JSONEncoder {}
 
 private let formatter = ISO8601DateFormatter()
 
