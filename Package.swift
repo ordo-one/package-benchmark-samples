@@ -1,10 +1,10 @@
-// swift-tools-version: 5.6
+// swift-tools-version: 5.7
 
 import PackageDescription
 
 let package = Package(
     name: "PackageBenchmarkSamples",
-    platforms: [.macOS(.v12)],
+    platforms: [.macOS(.v13)],
 
     products: [
         .library(
@@ -13,8 +13,8 @@ let package = Package(
     ],
 
     dependencies: [
-         .package(url: "https://github.com/ordo-one/package-benchmark", .upToNextMajor(from: "0.4.0")),
-       //  .package(path: "../package-benchmark")
+       //  .package(url: "https://github.com/ordo-one/package-benchmark", .upToNextMajor(from: "0.4.0")),
+         .package(path: "../package-benchmark")
     ],
 
     targets: [
@@ -50,6 +50,24 @@ let package = Package(
                 .product(name: "BenchmarkSupport", package: "package-benchmark"),
             ],
             path: "Benchmarks/Miscellaneous"
+        ),
+
+        // One test for problems with memory measurements
+        .executableTarget(
+            name: "MemoryOne",
+            dependencies: [
+                .product(name: "BenchmarkSupport", package: "package-benchmark"),
+            ],
+            path: "Benchmarks/MemoryOne"
+        ),
+
+        // Another test for problems with memory measurements
+        .executableTarget(
+            name: "MemoryTwo",
+            dependencies: [
+                .product(name: "BenchmarkSupport", package: "package-benchmark"),
+            ],
+            path: "Benchmarks/MemoryTwo"
         ),
 
         // Some test benchmarks on Foundation
