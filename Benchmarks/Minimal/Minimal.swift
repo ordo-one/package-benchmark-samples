@@ -8,12 +8,11 @@
 // http://www.apache.org/licenses/LICENSE-2.0
 //
 
-import BenchmarkSupport                 // import supporting infrastructure
-@main extension BenchmarkRunner {}      // Required for main() definition to not get linker errors
+import BenchmarkSupport // import supporting infrastructure
+@main extension BenchmarkRunner {} // Required for main() definition to not get linker errors
 
 @_dynamicReplacement(for: registerBenchmarks) // Register benchmarks
 func benchmarks() {
-
-    Benchmark("Minimal benchmark") { benchmark in
+    Benchmark("Minimal benchmark") { _ in
     }
 }

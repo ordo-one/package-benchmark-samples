@@ -8,14 +8,13 @@
 // http://www.apache.org/licenses/LICENSE-2.0
 //
 
-import BenchmarkSupport                 // import supporting infrastructure
-@main extension BenchmarkRunner {}      // Required for main() definition to not get linker errors
+import BenchmarkSupport // import supporting infrastructure
+@main extension BenchmarkRunner {} // Required for main() definition to not get linker errors
 
 import Foundation
 
 @_dynamicReplacement(for: registerBenchmarks) // Register benchmarks
 func benchmarks() {
-
     Benchmark.defaultMetrics = BenchmarkMetric.memory
     Benchmark.defaultDesiredDuration = .seconds(3)
 
@@ -30,10 +29,10 @@ private let formatter = ISO8601DateFormatter()
 
 public class WeakCaptureEncoder: JSONEncoder {
     private let myFormatter: ISO8601DateFormatter
-    public override init() {
-        self.myFormatter = formatter
+    override public init() {
+        myFormatter = formatter
         super.init()
-        dateEncodingStrategy = .custom { [weak self] date, encoder in
+        dateEncodingStrategy = .custom { [weak self] _, _ in
             BenchmarkSupport.blackHole(self?.myFormatter)
         }
     }
