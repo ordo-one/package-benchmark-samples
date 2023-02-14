@@ -9,18 +9,20 @@ let package = Package(
     products: [
         .library(
             name: "PackageBenchmarkSamples",
-            targets: ["PackageBenchmarkSamples"]),
+            targets: ["PackageBenchmarkSamples"]
+        ),
     ],
 
     dependencies: [
-         .package(url: "https://github.com/ordo-one/package-benchmark", .upToNextMajor(from: "0.4.0")),
-       //  .package(path: "../package-benchmark")
+        .package(url: "https://github.com/ordo-one/package-benchmark", .upToNextMajor(from: "0.6.1")),
+        //  .package(path: "../package-benchmark")
     ],
 
     targets: [
         .target(
             name: "PackageBenchmarkSamples",
-            dependencies: []),
+            dependencies: []
+        ),
 
         // Sample benchmark executable targets, a few displaying how benchmarks can be split up.
 
@@ -38,7 +40,7 @@ let package = Package(
             name: "Samples",
             dependencies: [
                 .product(name: "BenchmarkSupport", package: "package-benchmark"),
-                "PackageBenchmarkSamples"
+                "PackageBenchmarkSamples",
             ],
             path: "Benchmarks/Samples"
         ),
