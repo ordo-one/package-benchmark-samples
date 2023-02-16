@@ -31,30 +31,28 @@ func benchmarks() {
         }
     }
 
-    Benchmark("Memory leak 123 allocations of 4K",
-              metrics: BenchmarkMetric.memory) { _ in
+    Benchmark.defaultConfiguration = .init(metrics: BenchmarkMetric.memory)
+
+    Benchmark("Memory leak 123 allocations of 4K") { _ in
         performAllocations(count: 123, size: 4096, shouldFree: false)
     }
 
     Benchmark("Memory transient allocations (1K small, 1001 large, 1M leak)",
-              metrics: BenchmarkMetric.memory,
-              throughputScalingFactor: .kilo) { benchmark in
-        performAllocations(count: benchmark.throughputScalingFactor.rawValue, size: 10)
-        performAllocations(count: benchmark.throughputScalingFactor.rawValue, size: 64 * 1024)
+              configuration: .init(throughputScalingFactor: .kilo)) { benchmark in
+        performAllocations(count: benchmark.configuration.throughputScalingFactor.rawValue, size: 10)
+        performAllocations(count: benchmark.configuration.throughputScalingFactor.rawValue, size: 64 * 1024)
         performAllocations(count: 1, size: 1024 * 1024, shouldFree: false)
     }
 
     Benchmark("Memory transient allocations + 1 large leak",
-              metrics: BenchmarkMetric.memory,
-              throughputScalingFactor: .kilo) { benchmark in
-        performAllocations(count: benchmark.throughputScalingFactor.rawValue, size: 11 * 1024 * 1024)
+              configuration: .init(throughputScalingFactor: .kilo)) { benchmark in
+        performAllocations(count: benchmark.configuration.throughputScalingFactor.rawValue, size: 11 * 1024 * 1024)
         performAllocations(count: 1, size: 32 * 1024 * 1024, shouldFree: false)
     }
 
     Benchmark("Memory transient allocations no leak",
-              metrics: BenchmarkMetric.memory,
-              throughputScalingFactor: .kilo) { benchmark in
-        performAllocations(count: benchmark.throughputScalingFactor.rawValue, size: 11 * 1024 * 1024)
+              configuration: .init(throughputScalingFactor: .kilo)) { benchmark in
+        performAllocations(count: benchmark.configuration.throughputScalingFactor.rawValue, size: 11 * 1024 * 1024)
         performAllocations(count: 1, size: 32 * 1024 * 1024)
     }
 }
