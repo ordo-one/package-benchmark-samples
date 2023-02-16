@@ -14,7 +14,8 @@ let package = Package(
     ],
 
     dependencies: [
-        .package(url: "https://github.com/ordo-one/package-benchmark", .upToNextMajor(from: "0.6.1")),
+        // .package(url: "https://github.com/ordo-one/package-benchmark", branch: "main"),
+        .package(url: "https://github.com/ordo-one/package-benchmark", .upToNextMajor(from: "0.8.0")),
         //  .package(path: "../package-benchmark")
     ],
 
