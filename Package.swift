@@ -14,9 +14,8 @@ let package = Package(
     ],
 
     dependencies: [
-        // .package(url: "https://github.com/ordo-one/package-benchmark", branch: "main"),
         .package(url: "https://github.com/ordo-one/package-benchmark", .upToNextMajor(from: "0.8.0")),
-        //  .package(path: "../package-benchmark")
+        .package(url: "https://github.com/swift-extras/swift-extras-json.git", .upToNextMajor(from: "0.6.0")),
     ],
 
     targets: [
@@ -81,5 +80,19 @@ let package = Package(
             ],
             path: "Benchmarks/Foundation"
         ),
+
+        // Benchmarks on external libraries
+        .executableTarget(
+            name: "External-Benchmarks",
+            dependencies: [
+                .product(name: "ExtrasJSON", package: "swift-extras-json"),
+                .product(name: "BenchmarkSupport", package: "package-benchmark")
+            ],
+            path: "Benchmarks/External",
+            resources: [
+                .process("Resources/example.geojson"),
+
+            ]
+        )
     ]
 )
