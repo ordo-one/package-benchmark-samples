@@ -12,18 +12,17 @@ import BenchmarkSupport
 @main extension BenchmarkRunner {}
 
 #if os(macOS) || os(iOS) || os(watchOS) || os(tvOS)
-import Darwin
+    import Darwin
 #elseif os(Linux) || os(FreeBSD) || os(Android)
-import Glibc
+    import Glibc
 #else
-#error("Unsupported Platform")
+    #error("Unsupported Platform")
 #endif
 
 @_dynamicReplacement(for: registerBenchmarks)
 func benchmarks() {
-
     func performAllocations(count: Int, size: Int, shouldFree: Bool = true) {
-        for _ in 0..<count {
+        for _ in 0 ..< count {
             let x = malloc(size)
             blackHole(x)
             if shouldFree {
@@ -32,30 +31,28 @@ func benchmarks() {
         }
     }
 
-    Benchmark("Memory leak 123 allocations of 4K",
-              metrics: BenchmarkMetric.memory) { benchmark in
-        performAllocations(count: 123, size:4096, shouldFree:false)
+    Benchmark.defaultConfiguration = .init(metrics: BenchmarkMetric.memory)
+
+    Benchmark("Memory leak 123 allocations of 4K") { _ in
+        performAllocations(count: 123, size: 4096, shouldFree: false)
     }
 
     Benchmark("Memory transient allocations (1K small, 1001 large, 1M leak)",
-              metrics: BenchmarkMetric.memory,
-              throughputScalingFactor: .kilo) { benchmark in
-        performAllocations(count: benchmark.throughputScalingFactor.rawValue, size:10)
-        performAllocations(count: benchmark.throughputScalingFactor.rawValue, size:64*1024)
-        performAllocations(count: 1, size:1024*1024, shouldFree: false)
+              configuration: .init(scalingFactor: .kilo)) { benchmark in
+        performAllocations(count: benchmark.configuration.scalingFactor.rawValue, size: 10)
+        performAllocations(count: benchmark.configuration.scalingFactor.rawValue, size: 64 * 1024)
+        performAllocations(count: 1, size: 1024 * 1024, shouldFree: false)
     }
 
     Benchmark("Memory transient allocations + 1 large leak",
-              metrics: BenchmarkMetric.memory,
-              throughputScalingFactor: .kilo) { benchmark in
-        performAllocations(count: benchmark.throughputScalingFactor.rawValue, size:11*1_024*1_024)
-        performAllocations(count: 1, size:32*1024*1024, shouldFree: false)
+              configuration: .init(scalingFactor: .kilo)) { benchmark in
+        performAllocations(count: benchmark.configuration.scalingFactor.rawValue, size: 11 * 1024 * 1024)
+        performAllocations(count: 1, size: 32 * 1024 * 1024, shouldFree: false)
     }
 
     Benchmark("Memory transient allocations no leak",
-              metrics: BenchmarkMetric.memory,
-              throughputScalingFactor: .kilo) { benchmark in
-        performAllocations(count: benchmark.throughputScalingFactor.rawValue, size:11*1_024*1_024)
-        performAllocations(count: 1, size:32*1024*1024)
+              configuration: .init(scalingFactor: .kilo)) { benchmark in
+        performAllocations(count: benchmark.configuration.scalingFactor.rawValue, size: 11 * 1024 * 1024)
+        performAllocations(count: 1, size: 32 * 1024 * 1024)
     }
 }

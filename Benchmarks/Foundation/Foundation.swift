@@ -8,17 +8,27 @@
 // http://www.apache.org/licenses/LICENSE-2.0
 //
 
-import SystemPackage
-import Foundation
 import BenchmarkSupport
+import Foundation
+import SystemPackage
 @main extension BenchmarkRunner {}
 
 @_dynamicReplacement(for: registerBenchmarks)
 func benchmarks() {
+    let customThreshold = BenchmarkResult.PercentileThresholds(relative: [.p50: 5.0, .p75: 10.0],
+                                                               absolute: [.p25: 10, .p50: 15])
+    let customThreshold2 = BenchmarkResult.PercentileThresholds(relative: .strict)
+    let customThreshold3 = BenchmarkResult.PercentileThresholds(absolute: .relaxed)
+
+    Benchmark.defaultConfiguration = .init(timeUnits: .microseconds,
+                                           thresholds: [.wallClock: customThreshold,
+                                                        .throughput: customThreshold2,
+                                                        .cpuTotal: customThreshold3,
+                                                        .cpuUser: .strict])
+
     Benchmark("Foundation Date()",
-              metrics: [.throughput, .wallClock],
-              throughputScalingFactor: .mega) { benchmark in
-        for _ in 0..<benchmark.throughputScalingFactor.rawValue * 3 { // regression on purpose
+              configuration: .init(metrics: [.throughput, .wallClock], scalingFactor: .mega)) { benchmark in
+        for _ in benchmark.scaledIterations {
             blackHole(Date())
         }
     }
