@@ -31,7 +31,7 @@ jobs:
         id: benchmark
         run: |
           echo $(date) >> $GITHUB_STEP_SUMMARY
-          swift package benchmark --format markdown >> $GITHUB_STEP_SUMMARY
+          swift package benchmark --format markdown --no-progress >> $GITHUB_STEP_SUMMARY
       - name: Pull request comment text
         id: prtest
         run: |
