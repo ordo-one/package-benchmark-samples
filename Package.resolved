@@ -5,8 +5,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/ordo-one/package-benchmark",
       "state" : {
-        "revision" : "81bd87b4eca4c1fff0275fa55fd52b1faf3814d9",
-        "version" : "0.8.0"
+        "revision" : "3b3d46ee240a886d8987938d0c563874e04feeda",
+        "version" : "0.9.0"
       }
     },
     {
@@ -23,8 +23,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/ordo-one/package-histogram",
       "state" : {
-        "revision" : "49df02bf90df582151bcaa363796133251c278c4",
-        "version" : "0.1.0"
+        "revision" : "604410b21ded1ebdf06ad98100f448c68e80f5a1",
+        "version" : "0.1.1"
       }
     },
     {
@@ -34,6 +34,15 @@
       "state" : {
         "revision" : "e8a5db026963f5bfeac842d9d3f2cc8cde323b49",
         "version" : "1.0.0"
+      }
+    },
+    {
+      "identity" : "progress.swift",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/ordo-one/Progress.swift",
+      "state" : {
+        "revision" : "29dc5dc29d8408f42878b832c7aae38a35ff26ee",
+        "version" : "1.0.3"
       }
     },
     {

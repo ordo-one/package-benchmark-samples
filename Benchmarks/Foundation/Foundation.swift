@@ -27,8 +27,8 @@ func benchmarks() {
                                                         .cpuUser: .strict])
 
     Benchmark("Foundation Date()",
-              configuration: .init(metrics: [.throughput, .wallClock], throughputScalingFactor: .mega)) { benchmark in
-        for _ in benchmark.throughputIterations {
+              configuration: .init(metrics: [.throughput, .wallClock], scalingFactor: .mega)) { benchmark in
+        for _ in benchmark.scaledIterations {
             blackHole(Date())
         }
     }

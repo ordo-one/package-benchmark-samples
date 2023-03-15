@@ -16,11 +16,11 @@ import Foundation
 @_dynamicReplacement(for: registerBenchmarks) // Register benchmarks
 func benchmarks() {
     Benchmark.defaultConfiguration.metrics = BenchmarkMetric.memory
-    Benchmark.defaultConfiguration.desiredDuration = .seconds(3)
-    Benchmark.defaultConfiguration.throughputScalingFactor = .kilo
+    Benchmark.defaultConfiguration.maxDuration = .seconds(3)
+    Benchmark.defaultConfiguration.scalingFactor = .kilo
 
     Benchmark("Explicit Capture Memory") { benchmark in
-        for _ in benchmark.throughputIterations {
+        for _ in benchmark.scaledIterations {
             BenchmarkSupport.blackHole(ExplicitCaptureEncoder())
         }
     }

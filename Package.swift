@@ -14,7 +14,8 @@ let package = Package(
     ],
 
     dependencies: [
-        .package(url: "https://github.com/ordo-one/package-benchmark", .upToNextMajor(from: "0.8.0")),
+//        .package(url: "https://github.com/ordo-one/package-benchmark", branch: "main"),
+        .package(url: "https://github.com/ordo-one/package-benchmark", .upToNextMajor(from: "0.9.0")),
         .package(url: "https://github.com/swift-extras/swift-extras-json.git", .upToNextMajor(from: "0.6.0")),
     ],
 

@@ -32,7 +32,7 @@ func benchmarks() {
         static var two: BenchmarkMetric { .custom("CustomMetricTwo", polarity: .prefersLarger) }
     }
 
-    Benchmark.defaultConfiguration.desiredDuration = .milliseconds(20)
+    Benchmark.defaultConfiguration.maxDuration = .milliseconds(20)
 
     @Sendable func defaultCounter() -> Int { 1000 }
     @Sendable func dummyCounter(_ count: Int) {
@@ -110,7 +110,7 @@ func benchmarks() {
     }
 
     var force57 = wallClockThroughputConfiguration
-    force57.desiredIterations = 57
+    force57.maxIterations = 57
 
     Benchmark("Counter 57 iterations",
               configuration: force57) { _ in
@@ -139,8 +139,8 @@ func benchmarks() {
     Benchmark("Disk metrics, writing 64K x 1.000",
               configuration: .init(
                   metrics: BenchmarkMetric.disk,
-                  throughputScalingFactor: .kilo,
-                  desiredDuration: .seconds(1)
+                  scalingFactor: .kilo,
+                  maxDuration: .seconds(1)
               )) { benchmark in
         do {
             let fileDescriptor = FileDescriptor(rawValue: fileno(tmpfile()))
@@ -150,7 +150,7 @@ func benchmarks() {
 
             try fileDescriptor.closeAfter {
                 try data.withUnsafeBufferPointer {
-                    for _ in benchmark.throughputIterations {
+                    for _ in benchmark.scaledIterations {
                         _ = try fileDescriptor.write(UnsafeRawBufferPointer($0))
                     }
                 }
@@ -188,7 +188,7 @@ func benchmarks() {
     }
 
     Benchmark("All metrics, full concurrency, async",
-              configuration: .init(metrics: BenchmarkMetric.all, desiredDuration: .seconds(1))) { _ in
+              configuration: .init(metrics: BenchmarkMetric.all, maxDuration: .seconds(1))) { _ in
         await concurrentWork(tasks: 80)
     }
 
