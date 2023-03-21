@@ -20,12 +20,10 @@
     #error("Unsupported Platform")
 #endif
 
-import BenchmarkSupport
+import Benchmark
 import SystemPackage
-@main extension BenchmarkRunner {}
 
-@_dynamicReplacement(for: registerBenchmarks)
-func benchmarks() {
+let benchmarks = {
     // A way to define custom metrics fairly compact
     enum CustomMetrics {
         static var one: BenchmarkMetric { .custom("CustomMetricOne") }
@@ -203,10 +201,10 @@ func benchmarks() {
         dummyCounter(defaultCounter())
     }
 
-    let customThreshold = BenchmarkResult.PercentileThresholds(relative: [.p50: 5.0, .p75: 10.0],
-                                                               absolute: [.p25: 10, .p50: 15])
-    let customThreshold2 = BenchmarkResult.PercentileThresholds(relative: .strict)
-    let customThreshold3 = BenchmarkResult.PercentileThresholds(absolute: .relaxed)
+    let customThreshold = BenchmarkThresholds(relative: [.p50: 5.0, .p75: 10.0],
+                                              absolute: [.p25: 10, .p50: 15])
+    let customThreshold2 = BenchmarkThresholds(relative: BenchmarkThresholds.Relative.strict)
+    let customThreshold3 = BenchmarkThresholds(absolute: BenchmarkThresholds.Absolute.relaxed)
 
     let customThresholds: Benchmark.Configuration = .init(metrics: [.wallClock, .throughput, .cpuTotal, .cpuUser],
                                                           thresholds: [.wallClock: customThreshold,

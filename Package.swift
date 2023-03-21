@@ -15,7 +15,8 @@ let package = Package(
 
     dependencies: [
 //        .package(url: "https://github.com/ordo-one/package-benchmark", branch: "main"),
-        .package(url: "https://github.com/ordo-one/package-benchmark", .upToNextMajor(from: "0.9.0")),
+//        .package(path: "../package-benchmark"),
+        .package(url: "https://github.com/ordo-one/package-benchmark", .upToNextMajor(from: "1.0.0")),
         .package(url: "https://github.com/swift-extras/swift-extras-json.git", .upToNextMajor(from: "0.6.0")),
     ],
 
@@ -31,7 +32,8 @@ let package = Package(
         .executableTarget(
             name: "Minimal",
             dependencies: [
-                .product(name: "BenchmarkSupport", package: "package-benchmark"),
+                .product(name: "Benchmark", package: "package-benchmark"),
+                .product(name: "BenchmarkPlugin", package: "package-benchmark"),
             ],
             path: "Benchmarks/Minimal"
         ),
@@ -40,7 +42,8 @@ let package = Package(
         .executableTarget(
             name: "Samples",
             dependencies: [
-                .product(name: "BenchmarkSupport", package: "package-benchmark"),
+                .product(name: "Benchmark", package: "package-benchmark"),
+                .product(name: "BenchmarkPlugin", package: "package-benchmark"),
                 "PackageBenchmarkSamples",
             ],
             path: "Benchmarks/Samples"
@@ -50,7 +53,8 @@ let package = Package(
         .executableTarget(
             name: "Miscellaneous",
             dependencies: [
-                .product(name: "BenchmarkSupport", package: "package-benchmark"),
+                .product(name: "Benchmark", package: "package-benchmark"),
+                .product(name: "BenchmarkPlugin", package: "package-benchmark"),
             ],
             path: "Benchmarks/Miscellaneous"
         ),
@@ -59,7 +63,8 @@ let package = Package(
         .executableTarget(
             name: "MemoryOne",
             dependencies: [
-                .product(name: "BenchmarkSupport", package: "package-benchmark"),
+                .product(name: "Benchmark", package: "package-benchmark"),
+                .product(name: "BenchmarkPlugin", package: "package-benchmark"),
             ],
             path: "Benchmarks/MemoryOne"
         ),
@@ -68,7 +73,8 @@ let package = Package(
         .executableTarget(
             name: "MemoryTwo",
             dependencies: [
-                .product(name: "BenchmarkSupport", package: "package-benchmark"),
+                .product(name: "Benchmark", package: "package-benchmark"),
+                .product(name: "BenchmarkPlugin", package: "package-benchmark"),
             ],
             path: "Benchmarks/MemoryTwo"
         ),
@@ -77,7 +83,8 @@ let package = Package(
         .executableTarget(
             name: "Foundation-Benchmark",
             dependencies: [
-                .product(name: "BenchmarkSupport", package: "package-benchmark"),
+                .product(name: "Benchmark", package: "package-benchmark"),
+                .product(name: "BenchmarkPlugin", package: "package-benchmark"),
             ],
             path: "Benchmarks/Foundation"
         ),
@@ -87,7 +94,8 @@ let package = Package(
             name: "External-Benchmarks",
             dependencies: [
                 .product(name: "ExtrasJSON", package: "swift-extras-json"),
-                .product(name: "BenchmarkSupport", package: "package-benchmark")
+                .product(name: "Benchmark", package: "package-benchmark"),
+                .product(name: "BenchmarkPlugin", package: "package-benchmark"),
             ],
             path: "Benchmarks/External",
             resources: [

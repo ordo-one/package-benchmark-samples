@@ -1,9 +1,6 @@
-import BenchmarkSupport // imports supporting benchmark infrastructure
+import Benchmark // imports supporting benchmark infrastructure
 import ExtrasJSON
 import Foundation
-
-// Required for the main() definition to no get linker errors
-@main extension BenchmarkRunner {}
 
 func loadGeoJSON() async -> Data {
     guard let traceURL = Bundle.module.url(forResource: "example", withExtension: "geojson") else {
@@ -37,8 +34,7 @@ func parseDataIntoJSON(data: Data) async -> JSONValue {
     }
 }
 
-@_dynamicReplacement(for: registerBenchmarks) // And this is how we register our benchmarks
-func benchmarks() {
+let benchmarks = {
     Benchmark.defaultConfiguration.maxIterations = .count(1)
     Benchmark.defaultConfiguration.maxDuration = .seconds(3)
 

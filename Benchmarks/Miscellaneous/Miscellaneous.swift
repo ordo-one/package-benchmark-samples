@@ -8,8 +8,7 @@
 // http://www.apache.org/licenses/LICENSE-2.0
 //
 
-import BenchmarkSupport
-@main extension BenchmarkRunner {}
+import Benchmark
 
 #if os(macOS) || os(iOS) || os(watchOS) || os(tvOS)
     import Darwin
@@ -19,8 +18,7 @@ import BenchmarkSupport
     #error("Unsupported Platform")
 #endif
 
-@_dynamicReplacement(for: registerBenchmarks)
-func benchmarks() {
+let benchmarks = {
     func performAllocations(count: Int, size: Int, shouldFree: Bool = true) {
         for _ in 0 ..< count {
             let x = malloc(size)

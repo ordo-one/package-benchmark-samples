@@ -8,20 +8,17 @@
 // http://www.apache.org/licenses/LICENSE-2.0
 //
 
-import BenchmarkSupport // import supporting infrastructure
-@main extension BenchmarkRunner {} // Required for main() definition to not get linker errors
-
 import Foundation
+import Benchmark
 
-@_dynamicReplacement(for: registerBenchmarks) // Register benchmarks
-func benchmarks() {
+let benchmarks = {
     Benchmark.defaultConfiguration.metrics = BenchmarkMetric.memory
     Benchmark.defaultConfiguration.maxDuration = .seconds(3)
     Benchmark.defaultConfiguration.scalingFactor = .kilo
 
     Benchmark("Explicit Capture Memory") { benchmark in
         for _ in benchmark.scaledIterations {
-            BenchmarkSupport.blackHole(ExplicitCaptureEncoder())
+            blackHole(ExplicitCaptureEncoder())
         }
     }
 }
@@ -34,7 +31,7 @@ public class ExplicitCaptureEncoder: JSONEncoder {
         myFormatter = formatter
         super.init()
         dateEncodingStrategy = .custom { _, _ in
-            BenchmarkSupport.blackHole(self.myFormatter)
+            blackHole(self.myFormatter)
         }
     }
 }
