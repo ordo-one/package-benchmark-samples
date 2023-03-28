@@ -28,8 +28,10 @@ let benchmarks = {
                                            thresholds: [.wallClock: customThreshold,
                                                         .throughput: customThreshold2])
 
+    Benchmark.defaultConfiguration.metrics = [.throughput, .wallClock] + BenchmarkMetric.arc
+
     Benchmark("Foundation Date()",
-              configuration: .init(metrics: [.throughput, .wallClock], scalingFactor: .mega)) { benchmark in
+              configuration: .init(scalingFactor: .mega)) { benchmark in
         for _ in benchmark.scaledIterations {
             blackHole(Date())
         }

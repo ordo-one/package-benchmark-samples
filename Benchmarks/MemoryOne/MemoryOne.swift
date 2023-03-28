@@ -12,7 +12,7 @@ import Foundation
 import Benchmark
 
 let benchmarks = {
-    Benchmark.defaultConfiguration.metrics = BenchmarkMetric.memory
+    Benchmark.defaultConfiguration.metrics = BenchmarkMetric.memory + BenchmarkMetric.arc
     Benchmark.defaultConfiguration.maxDuration = .seconds(3)
     Benchmark.defaultConfiguration.scalingFactor = .kilo
 

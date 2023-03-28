@@ -35,33 +35,31 @@ func parseDataIntoJSON(data: Data) async -> JSONValue {
 }
 
 let benchmarks = {
-    Benchmark.defaultConfiguration.maxIterations = .count(1)
+    Benchmark.defaultConfiguration.maxIterations = .count(1000)
     Benchmark.defaultConfiguration.maxDuration = .seconds(3)
+    Benchmark.defaultConfiguration.metrics = [.throughput, .wallClock] + BenchmarkMetric.arc
 
-    Benchmark("Loading JSON trace data",
-              configuration: .init(metrics: [.throughput, .wallClock], maxIterations: 20)) { benchmark in
+    Benchmark("Loading JSON trace data") { benchmark in
         for _ in benchmark.scaledIterations {
             blackHole(await loadGeoJSON())
         }
     }
 
-    Benchmark("parse JSON with Swift Extras parser",
-              configuration: .init(metrics: [.throughput, .wallClock], maxIterations: 500)) { benchmark in
+    Benchmark("Parse JSON with Swift Extras parser") { benchmark in
+        let data = await loadGeoJSON()
+
+        benchmark.startMeasurement()
         for _ in benchmark.scaledIterations {
-            let data = await loadGeoJSON()
-            benchmark.startMeasurement()
             blackHole(await parseDataIntoJSON(data: data))
-            benchmark.stopMeasurement()
         }
     }
 
-    Benchmark("parse JSON with Foundation JSONSerialization parser",
-              configuration: .init(metrics: [.throughput, .wallClock], maxIterations: 500)) { benchmark in
+    Benchmark("Parse JSON with Foundation JSONSerialization parser") { benchmark in
+        let data = await loadGeoJSON()
+
+        benchmark.startMeasurement()
         for _ in benchmark.scaledIterations {
-            let data = await loadGeoJSON()
-            benchmark.startMeasurement()
             blackHole(await parseDataIntoJSONSerialization(data: data))
-            benchmark.stopMeasurement()
         }
     }
 }
