@@ -15,8 +15,8 @@ let package = Package(
 
     dependencies: [
 //        .package(url: "https://github.com/ordo-one/package-benchmark", branch: "main"),
-//        .package(path: "../package-benchmark"),
-        .package(url: "https://github.com/ordo-one/package-benchmark", .upToNextMajor(from: "1.0.0")),
+        .package(path: "../package-benchmark"),
+//        .package(url: "https://github.com/ordo-one/package-benchmark", .upToNextMajor(from: "1.0.0")),
         .package(url: "https://github.com/swift-extras/swift-extras-json.git", .upToNextMajor(from: "0.6.0")),
     ],
 
@@ -105,3 +105,27 @@ let package = Package(
         )
     ]
 )
+
+// Benchmark of TestBenchmarkInit
+package.targets += [
+    .executableTarget(
+        name: "TestBenchmarkInit",
+        dependencies: [
+            .product(name: "Benchmark", package: "package-benchmark"),
+            .product(name: "BenchmarkPlugin", package: "package-benchmark")
+        ],
+        path: "Benchmarks/TestBenchmarkInit"
+    ),
+]
+
+// Benchmark of TestBenchmarkInitNew
+package.targets += [
+    .executableTarget(
+        name: "TestBenchmarkInitNew",
+        dependencies: [
+            .product(name: "Benchmark", package: "package-benchmark"),
+            .product(name: "BenchmarkPlugin", package: "package-benchmark")
+        ],
+        path: "Benchmarks/TestBenchmarkInitNew"
+    ),
+]
