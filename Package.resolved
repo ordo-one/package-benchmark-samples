@@ -1,6 +1,15 @@
 {
   "pins" : [
     {
+      "identity" : "package-benchmark",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/ordo-one/package-benchmark",
+      "state" : {
+        "revision" : "874ee0c184a4e89be111349b8dab2e61b6773937",
+        "version" : "1.6.1"
+      }
+    },
+    {
       "identity" : "package-datetime",
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/ordo-one/package-datetime",
@@ -50,8 +59,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/apple/swift-atomics",
       "state" : {
-        "revision" : "ff3d2212b6b093db7f177d0855adbc4ef9c5f036",
-        "version" : "1.0.3"
+        "revision" : "6c89474e62719ddcc1e9614989fff2f68208fe10",
+        "version" : "1.1.0"
       }
     },
     {

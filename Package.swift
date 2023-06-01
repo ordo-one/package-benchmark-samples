@@ -15,8 +15,8 @@ let package = Package(
 
     dependencies: [
 //        .package(url: "https://github.com/ordo-one/package-benchmark", branch: "main"),
-        .package(path: "../package-benchmark"),
-//        .package(url: "https://github.com/ordo-one/package-benchmark", .upToNextMajor(from: "1.0.0")),
+//        .package(path: "../package-benchmark"),
+        .package(url: "https://github.com/ordo-one/package-benchmark", .upToNextMajor(from: "1.0.0")),
         .package(url: "https://github.com/swift-extras/swift-extras-json.git", .upToNextMajor(from: "0.6.0")),
     ],
 
@@ -33,9 +33,11 @@ let package = Package(
             name: "Minimal",
             dependencies: [
                 .product(name: "Benchmark", package: "package-benchmark"),
-                .product(name: "BenchmarkPlugin", package: "package-benchmark"),
             ],
-            path: "Benchmarks/Minimal"
+            path: "Benchmarks/Minimal",
+            plugins: [
+                .plugin(name: "BenchmarkPlugin", package: "package-benchmark"),
+            ]
         ),
 
         // Sample showing wide range of API usage
@@ -43,10 +45,12 @@ let package = Package(
             name: "Samples",
             dependencies: [
                 .product(name: "Benchmark", package: "package-benchmark"),
-                .product(name: "BenchmarkPlugin", package: "package-benchmark"),
                 "PackageBenchmarkSamples",
             ],
-            path: "Benchmarks/Samples"
+            path: "Benchmarks/Samples",
+            plugins: [
+                .plugin(name: "BenchmarkPlugin", package: "package-benchmark"),
+            ]
         ),
 
         // Some miscellaneous tests for edge conditions
@@ -54,9 +58,11 @@ let package = Package(
             name: "Miscellaneous",
             dependencies: [
                 .product(name: "Benchmark", package: "package-benchmark"),
-                .product(name: "BenchmarkPlugin", package: "package-benchmark"),
             ],
-            path: "Benchmarks/Miscellaneous"
+            path: "Benchmarks/Miscellaneous",
+            plugins: [
+                .plugin(name: "BenchmarkPlugin", package: "package-benchmark"),
+            ]
         ),
 
         // One test for problems with memory measurements
@@ -64,9 +70,11 @@ let package = Package(
             name: "MemoryOne",
             dependencies: [
                 .product(name: "Benchmark", package: "package-benchmark"),
-                .product(name: "BenchmarkPlugin", package: "package-benchmark"),
             ],
-            path: "Benchmarks/MemoryOne"
+            path: "Benchmarks/MemoryOne",
+            plugins: [
+                .plugin(name: "BenchmarkPlugin", package: "package-benchmark"),
+            ]
         ),
 
         // Another test for problems with memory measurements
@@ -74,9 +82,11 @@ let package = Package(
             name: "MemoryTwo",
             dependencies: [
                 .product(name: "Benchmark", package: "package-benchmark"),
-                .product(name: "BenchmarkPlugin", package: "package-benchmark"),
             ],
-            path: "Benchmarks/MemoryTwo"
+            path: "Benchmarks/MemoryTwo",
+            plugins: [
+                .plugin(name: "BenchmarkPlugin", package: "package-benchmark"),
+            ]
         ),
 
         // Some test benchmarks on Foundation
@@ -84,9 +94,11 @@ let package = Package(
             name: "Foundation-Benchmark",
             dependencies: [
                 .product(name: "Benchmark", package: "package-benchmark"),
-                .product(name: "BenchmarkPlugin", package: "package-benchmark"),
             ],
-            path: "Benchmarks/Foundation"
+            path: "Benchmarks/Foundation",
+            plugins: [
+                .plugin(name: "BenchmarkPlugin", package: "package-benchmark"),
+            ]
         ),
 
         // Benchmarks on external libraries
@@ -95,37 +107,15 @@ let package = Package(
             dependencies: [
                 .product(name: "ExtrasJSON", package: "swift-extras-json"),
                 .product(name: "Benchmark", package: "package-benchmark"),
-                .product(name: "BenchmarkPlugin", package: "package-benchmark"),
             ],
             path: "Benchmarks/External",
             resources: [
                 .process("Resources/example.geojson"),
-
+            ],
+            plugins: [
+                .plugin(name: "BenchmarkPlugin", package: "package-benchmark"),
             ]
         )
     ]
 )
 
-// Benchmark of TestBenchmarkInit
-package.targets += [
-    .executableTarget(
-        name: "TestBenchmarkInit",
-        dependencies: [
-            .product(name: "Benchmark", package: "package-benchmark"),
-            .product(name: "BenchmarkPlugin", package: "package-benchmark")
-        ],
-        path: "Benchmarks/TestBenchmarkInit"
-    ),
-]
-
-// Benchmark of TestBenchmarkInitNew
-package.targets += [
-    .executableTarget(
-        name: "TestBenchmarkInitNew",
-        dependencies: [
-            .product(name: "Benchmark", package: "package-benchmark"),
-            .product(name: "BenchmarkPlugin", package: "package-benchmark")
-        ],
-        path: "Benchmarks/TestBenchmarkInitNew"
-    ),
-]
