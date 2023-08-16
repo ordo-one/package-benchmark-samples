@@ -28,7 +28,7 @@ let benchmarks = {
                                            thresholds: [.wallClock: customThreshold,
                                                         .throughput: customThreshold2])
 
-    Benchmark.defaultConfiguration.metrics = [.throughput, .wallClock] + BenchmarkMetric.arc
+    Benchmark.defaultConfiguration.metrics = [.throughput, .wallClock] + .arc
 
     Benchmark("Foundation Date()",
               configuration: .init(scalingFactor: .mega)) { benchmark in

@@ -80,7 +80,7 @@ let benchmarks = {
     }
 
     Benchmark("Extended metrics",
-              configuration: .init(metrics: BenchmarkMetric.extended)) { _ in
+              configuration: .init(metrics: .extended)) { _ in
         dummyCounter(defaultCounter())
     }
 
@@ -100,7 +100,7 @@ let benchmarks = {
     }
 
     Benchmark("Extended + custom metrics",
-              configuration: .init(metrics: BenchmarkMetric.extended +
+              configuration: .init(metrics: .extended +
                   [CustomMetrics.one, CustomMetrics.two])) { benchmark in
         dummyCounter(defaultCounter())
         benchmark.measurement(CustomMetrics.one, Int.random(in: 1 ... 1_000_000))
@@ -136,7 +136,7 @@ let benchmarks = {
 
     Benchmark("Disk metrics, writing 64K x 1.000",
               configuration: .init(
-                  metrics: BenchmarkMetric.disk,
+                  metrics: .disk,
                   scalingFactor: .kilo,
                   maxDuration: .seconds(1)
               )) { benchmark in
@@ -176,17 +176,17 @@ let benchmarks = {
     }
 
     Benchmark("Memory metrics, async",
-              configuration: .init(metrics: BenchmarkMetric.memory)) { _ in
+              configuration: .init(metrics: .memory)) { _ in
         await concurrentWork(tasks: 10, mallocs: 1000)
     }
 
     Benchmark("System metrics, async",
-              configuration: .init(metrics: BenchmarkMetric.system)) { _ in
+              configuration: .init(metrics: .system)) { _ in
         await concurrentWork(mallocs: 10)
     }
 
     Benchmark("All metrics, full concurrency, async",
-              configuration: .init(metrics: BenchmarkMetric.all, maxDuration: .seconds(1))) { _ in
+              configuration: .init(metrics: .all, maxDuration: .seconds(1))) { _ in
         await concurrentWork(tasks: 80)
     }
 

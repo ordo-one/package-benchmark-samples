@@ -29,7 +29,7 @@ let benchmarks = {
         }
     }
 
-    Benchmark.defaultConfiguration = .init(metrics: BenchmarkMetric.memory + BenchmarkMetric.arc)
+    Benchmark.defaultConfiguration = .init(metrics: .memory + .arc)
 
     Benchmark("Memory leak 123 allocations of 4K") { _ in
         performAllocations(count: 123, size: 4096, shouldFree: false)
