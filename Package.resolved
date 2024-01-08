@@ -1,30 +1,21 @@
 {
   "pins" : [
     {
+      "identity" : "hdrhistogram-swift",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/HdrHistogram/hdrhistogram-swift",
+      "state" : {
+        "revision" : "a69fa24d7b70421870cafa86340ece900489e17e",
+        "version" : "0.1.2"
+      }
+    },
+    {
       "identity" : "package-benchmark",
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/ordo-one/package-benchmark",
       "state" : {
-        "revision" : "0b15255d21fabe55bc67a34d167f1ed5e51f9af1",
-        "version" : "1.14.0"
-      }
-    },
-    {
-      "identity" : "package-datetime",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/ordo-one/package-datetime",
-      "state" : {
-        "revision" : "d1242188c9f48aad297e6ca9b717776f8660bc31",
-        "version" : "1.0.2"
-      }
-    },
-    {
-      "identity" : "package-histogram",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/ordo-one/package-histogram",
-      "state" : {
-        "revision" : "a69fa24d7b70421870cafa86340ece900489e17e",
-        "version" : "0.1.2"
+        "revision" : "c53cdcaf09495b61190b86fd031438da8988e60c",
+        "version" : "1.21.0"
       }
     },
     {
@@ -34,15 +25,6 @@
       "state" : {
         "revision" : "e8a5db026963f5bfeac842d9d3f2cc8cde323b49",
         "version" : "1.0.0"
-      }
-    },
-    {
-      "identity" : "progress.swift",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/ordo-one/Progress.swift",
-      "state" : {
-        "revision" : "29dc5dc29d8408f42878b832c7aae38a35ff26ee",
-        "version" : "1.0.3"
       }
     },
     {
