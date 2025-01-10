@@ -119,3 +119,17 @@ let package = Package(
     ]
 )
 
+
+// Benchmark of MultiFileExample
+package.targets += [
+    .executableTarget(
+        name: "MultiFileExample",
+        dependencies: [
+            .product(name: "Benchmark", package: "package-benchmark"),
+        ],
+        path: "Benchmarks/MultiFileExample",
+        plugins: [
+            .plugin(name: "BenchmarkPlugin", package: "package-benchmark")
+        ]
+    ),
+]

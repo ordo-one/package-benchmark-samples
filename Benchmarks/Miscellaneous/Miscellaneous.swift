@@ -29,7 +29,27 @@ let benchmarks = {
         }
     }
 
+    func performAllocationsMutablePointer(count: Int, size: Int, shouldFree: Bool = true) {
+        for _ in 0 ..< count {
+            let x: UnsafeMutablePointer<Int> = UnsafeMutablePointer.allocate(capacity: size)
+            blackHole(x)
+            if shouldFree {
+                free(x)
+            }
+        }
+    }
+
     Benchmark.defaultConfiguration = .init(metrics: .memory + .arc)
+    Benchmark.defaultConfiguration.maxIterations = 1
+
+    Benchmark("Memory leak 123 allocations of 4K - performAllocationsMutablePointer") { _ in
+        performAllocationsMutablePointer(count: 123, size: 4096, shouldFree: false)
+    }
+
+    Benchmark("Memory leak 1 allocation of 1K") { _ in
+        let x: UnsafeMutablePointer<Int> = UnsafeMutablePointer.allocate(capacity: 5000)
+        blackHole(x)
+    }
 
     Benchmark("Memory leak 123 allocations of 4K") { _ in
         performAllocations(count: 123, size: 4096, shouldFree: false)
