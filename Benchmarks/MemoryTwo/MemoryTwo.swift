@@ -25,7 +25,7 @@ let benchmarks = {
 
 private let formatter = ISO8601DateFormatter()
 
-public class WeakCaptureEncoder: JSONEncoder {
+public class WeakCaptureEncoder: JSONEncoder, @unchecked Sendable {
     private let myFormatter: ISO8601DateFormatter
     override public init() {
         myFormatter = formatter

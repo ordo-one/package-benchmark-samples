@@ -18,7 +18,7 @@ import Benchmark
     #error("Unsupported Platform")
 #endif
 
-let benchmarks = {
+let benchmarks: @Sendable () -> Void = {
     func performAllocations(count: Int, size: Int, shouldFree: Bool = true) {
         for _ in 0 ..< count {
             let x = malloc(size)

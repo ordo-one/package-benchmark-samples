@@ -10,7 +10,7 @@
 
 import Benchmark 
 
-let benchmarks = {
-    Benchmark("Minimal benchmark") { _ in
+let benchmarks: @Sendable () -> Void = {
+    Benchmark("Minimal benchmark") { benchmark in 
     }
 }

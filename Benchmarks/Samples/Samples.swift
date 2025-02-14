@@ -8,7 +8,7 @@
 // http://www.apache.org/licenses/LICENSE-2.0
 //
 
-@testable import PackageBenchmarkSamples
+import PackageBenchmarkSamples
 
 #if canImport(Darwin)
     import Darwin
@@ -23,7 +23,7 @@
 import Benchmark
 import SystemPackage
 
-let benchmarks = {
+let benchmarks: @Sendable () -> Void = {
     // A way to define custom metrics fairly compact
     enum CustomMetrics {
         static var one: BenchmarkMetric { .custom("CustomMetricOne") }
@@ -31,7 +31,7 @@ let benchmarks = {
     }
 
     Benchmark.defaultConfiguration.maxDuration = .milliseconds(20)
-
+    Benchmark.defaultConfiguration.units = [.peakMemoryResident: .mega, .peakMemoryVirtual: .giga]
     @Sendable func defaultCounter() -> Int { 1000 }
     @Sendable func dummyCounter(_ count: Int) {
         for x in 0 ..< count {
@@ -39,14 +39,10 @@ let benchmarks = {
         }
     }
 
-    let wallClockThroughputConfiguration: Benchmark.Configuration = .init(metrics: [.wallClock, .throughput])
+    let wallClockThroughputConfiguration: Benchmark.Configuration = .init(metrics: [.wallClock, .throughput],
+                                                                          units: [.wallClock: .kilo])
 
     // The actual benchmarks
-
-    Benchmark("myInternalDummyCounter", configuration: wallClockThroughputConfiguration) { _ in
-        myInternalDummyCounter(defaultCounter()) // Calls the function internal to the library target using @testable import
-    }
-
     Benchmark("Counter", configuration: wallClockThroughputConfiguration) { _ in
         dummyCounter(defaultCounter())
         dummyCounter(defaultCounter())

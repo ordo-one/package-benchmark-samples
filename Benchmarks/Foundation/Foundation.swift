@@ -12,7 +12,7 @@ import Foundation
 import SystemPackage
 import Benchmark
 
-let benchmarks = {
+let benchmarks: @Sendable () -> Void = {
     let customThreshold = BenchmarkThresholds(relative: [.p50: 5.0, .p75: 10.0],
                                               absolute: [.p25: 10, .p50: 15])
     let customThreshold2 = BenchmarkThresholds(relative: BenchmarkThresholds.Relative.strict)

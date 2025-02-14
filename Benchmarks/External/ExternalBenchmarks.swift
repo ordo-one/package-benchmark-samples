@@ -34,7 +34,7 @@ func parseDataIntoJSON(data: Data) async -> JSONValue {
     }
 }
 
-let benchmarks = {
+let benchmarks: @Sendable () -> Void = {
     Benchmark.defaultConfiguration.maxIterations = .count(1000)
     Benchmark.defaultConfiguration.maxDuration = .seconds(3)
     Benchmark.defaultConfiguration.metrics = [.throughput, .wallClock] + BenchmarkMetric.arc

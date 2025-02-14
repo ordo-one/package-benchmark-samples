@@ -1,10 +1,10 @@
-// swift-tools-version: 5.7
+// swift-tools-version: 6.0
 
 import PackageDescription
 
 let package = Package(
     name: "PackageBenchmarkSamples",
-    platforms: [.macOS(.v13)],
+    platforms: [.macOS(.v15)],
 
     products: [
         .library(
@@ -72,6 +72,9 @@ let package = Package(
                 .product(name: "Benchmark", package: "package-benchmark"),
             ],
             path: "Benchmarks/MemoryOne",
+            swiftSettings: [
+                .swiftLanguageMode(.v5)
+            ],
             plugins: [
                 .plugin(name: "BenchmarkPlugin", package: "package-benchmark"),
             ]
@@ -84,6 +87,9 @@ let package = Package(
                 .product(name: "Benchmark", package: "package-benchmark"),
             ],
             path: "Benchmarks/MemoryTwo",
+            swiftSettings: [
+                .swiftLanguageMode(.v5)
+            ],
             plugins: [
                 .plugin(name: "BenchmarkPlugin", package: "package-benchmark"),
             ]
@@ -128,6 +134,9 @@ package.targets += [
             .product(name: "Benchmark", package: "package-benchmark"),
         ],
         path: "Benchmarks/MultiFileExample",
+        swiftSettings: [
+            .swiftLanguageMode(.v5)
+        ],
         plugins: [
             .plugin(name: "BenchmarkPlugin", package: "package-benchmark")
         ]

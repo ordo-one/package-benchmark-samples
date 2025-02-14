@@ -1,4 +1,4 @@
-let benchmarks = {
+let benchmarks: @Sendable () -> Void = {
     addSomeBenchmarks()
     addSomeMoreBenchmarks()
 }
