@@ -20,12 +20,15 @@ import Benchmark
 
 let benchmarks: @Sendable () -> Void = {
     func performAllocations(count: Int, size: Int, shouldFree: Bool = true) {
-        for _ in 0 ..< count {
+        var index = 0
+        while index < count {
             let x = malloc(size)
+            // blackHole also causes a malloc call
             blackHole(x)
             if shouldFree {
                 free(x)
             }
+            index += 1
         }
     }
 
